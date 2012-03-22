@@ -14,6 +14,8 @@ if ($dbTable == "default") {
 	$brewing_db_table = "brewing";
 	$brewer_db_table = "brewer";
 	$users_db_table = "users";
+	$sbi_db_table = "special_best_info";
+	$sbd_db_table = "special_best_data";
 }
 else {
 	$suffix = get_suffix($dbTable);
@@ -25,5 +27,7 @@ else {
 	$brewing_db_table = "brewing_".$suffix;
 	$brewer_db_table = "brewer_".$suffix;
 	$users_db_table = "users_".$suffix;
+	$sbi_db_table = "special_best_info_".$suffix;
+	$sbd_db_table = "special_best_data_".$suffix;
 }
 ?>

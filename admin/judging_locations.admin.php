@@ -13,18 +13,21 @@ include(DB.'judging_locations.db.php');
 
 function brewer_assignment($a,$method){ 
 	switch($method) {
+	case "0": // 
+		if ($a == "X") return TRUE; else return FALSE;
+	break;
 	case "1": // 
-		if ($a == "J") $r = "Judge"; 
-		elseif ($a == "S") $r = "Steward"; 
-		elseif ($a == "X") $r = "Staff";
-		elseif ($a == "O") $r = "Organizer"; 
-		else $r = "Not Set";
+		if ($a == "J") $r = "Judge&nbsp;&nbsp;&nbsp;"; 
+		elseif ($a == "S") $r = "Steward&nbsp;&nbsp;&nbsp;"; 
+		elseif ($a == "X") $r = "Staff&nbsp;&nbsp;&nbsp;";
+		elseif ($a == "O") $r = "Organizer&nbsp;&nbsp;&nbsp;"; 
+		else $r = "";
 	break;
 	case "2": // for $filter URL variable
-		if ($a == "judges") $r = "J"; 
-		elseif ($a == "stewards") $r = "S"; 
-		elseif ($a == "staff") $r = "X";
-		elseif ($a == "bos") $r = "Y";
+		if ($a == "judges") $r = "1"; 
+		elseif ($a == "stewards") $r = "1"; 
+		elseif ($a == "staff") $r = "1";
+		elseif ($a == "bos") $r = "1";
 		else $r = "";
 	break;
 	case "3": // for $filter URL variable
@@ -38,15 +41,13 @@ function brewer_assignment($a,$method){
 return $r;
 }
 
-function brewer_assignment_checked($a,$b) {
-	if (($a == "judges") && ($b == "J")) $r = "CHECKED"; 
-	elseif (($a == "stewards") && ($b == "S")) $r = "CHECKED";
-	elseif (($a == "staff") && ($b == "X")) $r = "CHECKED";
-	elseif (($a == "bos") && ($b == "Y")) $r = "CHECKED"; 
-	elseif (($a == "staff") && ($b == "O")) $r = "DISABLED";
-	elseif (($a == "stewards") && ($b == "O")) $r = "DISABLED";
-	elseif (($a == "judges") && ($b == "O")) $r = "DISABLED";
-	elseif (($a == "bos") && ($b == "O")) $r = "DISABLED";
+function brewer_assignment_checked($filter,$judge,$steward,$staff,$organizer,$bos) {
+	    if (($filter == "judges") && ($judge == "1")) $r = "CHECKED"; 
+	elseif (($filter == "judges") && ($judge == "0") && ($steward == "1")) $r = "DISABLED";
+	elseif (($filter == "stewards") && ($judge == "0") && ($steward == "1")) $r = "CHECKED";
+	elseif (($filter == "stewards") && ($judge == "1") && ($steward == "0")) $r = "DISABLED";
+	elseif (($filter == "staff") && ($staff == "1")) $r = "CHECKED";
+	elseif (($filter == "bos") && ($bos == "1")) $r = "CHECKED"; 
 	else $r = "";
 	return $r;
 }
@@ -237,7 +238,7 @@ $row_brewers = mysql_fetch_assoc($brewers);
 <p><strong>Designate the Competition Organizer:</strong> <span class="data"><select name="Organizer">
 	<option value="">Choose Below:</option>
     <?php do { ?>
-   	<option value="<?php echo $row_brewers['uid']; ?>" <?php if (($row_brewers['brewerAssignment'] == "O")) echo "SELECTED";?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
+   	<option value="<?php echo $row_brewers['uid']; ?>" <?php if (($row_brewers['brewerAssignmentOrganizer'] == "1")) echo "SELECTED";?>><?php echo $row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']; ?></option>
     <?php } while ($row_brewers = mysql_fetch_assoc($brewers)); ?>
    </select>
 </span></p>
@@ -271,27 +272,41 @@ $row_brewers = mysql_fetch_assoc($brewers);
   <?php } ?>
   </thead>
   <tbody>
-  <?php 
- 	do { 
-	if ($filter == "bos") $assignment = $row_brewer['brewerJudgeBOS'];
-	else $assignment = $row_brewer['brewerAssignment'];
- ?>
+  <?php do {
+  /*
+  if ($filter == "judges") $assignment = $row_brewer['brewerAssignmentJudge'];
+  if ($filter == "steward") $assignment = $row_brewer['brewerAssignmentSteward']; 
+  if ($filter == "staff") $assignment = $row_brewer['brewerAssignmentStaff']; 
+  if ($filter == "bos") $assignment = $row_brewer['brewerJudgeBOS'];
+  else $disabled = "0";
+  if ($filter == "judges") $disabled = $row_brewer['brewerAssignmentSteward'];
+  if ($filter == "stewards") $disabled = $row_brewer['brewerAssignmentJudge'];
+  echo $disabled;
+  */
+  ?>
  <tr>
   <input type="hidden" name="id[]" value="<?php echo $row_brewer['id']; ?>" />
-  <?php if ($bid == "default") { ?>
-  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="<?php echo brewer_assignment($filter,"2"); ?>" <?php echo brewer_assignment_checked($filter,$assignment);?>></td>
+  <?php if ($bid == "default") {  ?>
+  <td width="1%" class="dataList"><input name="brewerAssignment<?php echo $row_brewer['id']; ?>" type="checkbox" value="1" <?php if ($row_brewer['brewerAssignmentOrganizer'] == "1") echo "DISABLED"; else echo brewer_assignment_checked($filter,$row_brewer['brewerAssignmentJudge'],$row_brewer['brewerAssignmentSteward'],$row_brewer['brewerAssignmentStaff'],$row_brewer['brewerAssignmentOrganizer'],$row_brewer['brewerJudgeBOS']);?>></td>
   <?php } else { ?>
   <td width="1%" class="dataList"><input name="<?php if ($filter == "judges") echo "brewerJudgeAssignedLocation".$row_brewer['id']; if ($filter == "stewards") echo "brewerStewardAssignedLocation".$row_brewer['id']; ?>" type="checkbox" value="<?php echo $bid; ?>" <?php if (($filter == "judges") && strstr($row_brewer['brewerJudgeAssignedLocation'], $bid)) echo "CHECKED"; if (($filter == "stewards") && strstr($row_brewer['brewerStewardAssignedLocation'], $bid)) echo "CHECKED"; ?>></td>
   <?php } ?>
   <td width="10%" class="dataList"><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
-  <td width="5%" class="dataList"><?php echo brewer_assignment($row_brewer['brewerAssignment'],"1"); ?></td>
+  <td width="5%" class="dataList">
+  <?php 
+  if ($row_brewer['brewerAssignmentJudge'] == "1") echo "Judge&nbsp;&nbsp;"; 
+  if ($row_brewer['brewerAssignmentSteward'] == "1") echo "Steward&nbsp;&nbsp;";
+  if ($row_brewer['brewerAssignmentStaff'] == "1") echo "Staff&nbsp;&nbsp;";
+  if ($row_brewer['brewerAssignmentOrganizer'] == "1") echo "Organizer";
+  ?>
+  </td>
   <?php if (($totalRows_stewarding2 > 1) && ($row_prefs['prefsCompOrg'] == "N")) { ?>
   <td width="15%" class="dataList">
-  <?php if ((($row_brewer['brewerAssignment'] == "J") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignment'] == "S") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>
+  <?php if ((($row_brewer['brewerAssignmentJudge'] == "1") && (($row_brewer['brewerJudgeAssignedLocation'] != "") || ($row_brewer['brewerJudgeAssignedLocation'] != "0"))) || (($row_brewer['brewerAssignmentSteward'] == "1") && (($row_brewer['brewerStewardAssignedLocation'] != "") || ($row_brewer['brewerStewardAssignedLocation'] != "")))) { ?>
 		<table class="dataTableCompact">
 		<?php 
-		if ($row_brewer['brewerAssignment'] == "J") $a = explode(",",$row_brewer['brewerJudgeAssignedLocation']);
-		if ($row_brewer['brewerAssignment'] == "S") $a = explode(",",$row_brewer['brewerStewardAssignedLocation']);
+		if ($row_brewer['brewerAssignmentJudge'] == "1") $a = explode(",",$row_brewer['brewerJudgeAssignedLocation']);
+		if ($row_brewer['brewerAssignmentSteward'] == "1") $a = explode(",",$row_brewer['brewerStewardAssignedLocation']);
 		sort($a);
 		foreach ($a as $value) {
 			if (($value != "") || ($value != 0)) {
@@ -318,8 +333,8 @@ $row_brewers = mysql_fetch_assoc($brewers);
   <td class="dataList">
   	<table class="dataTableCompact">
 		<?php 
-		if ($row_brewer['brewerAssignment'] == "J") $a = explode(",",$row_brewer['brewerJudgeLocation']);
-		if ($row_brewer['brewerAssignment'] == "S") $a = explode(",",$row_brewer['brewerStewardLocation']);
+		if ($row_brewer['brewerAssignmentJudge'] == "1") $a = explode(",",$row_brewer['brewerJudgeLocation']);
+		if ($row_brewer['brewerAssignmentSteward'] == "1") $a = explode(",",$row_brewer['brewerStewardLocation']);
 		arsort($a);
 		foreach ($a as $value) {
 			if ($value != "") {

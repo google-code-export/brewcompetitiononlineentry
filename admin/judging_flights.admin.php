@@ -138,11 +138,11 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY brewCategorySort,brewSubCategory", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $row_styles['style_name']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
@@ -164,7 +164,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
         <input type="hidden" name="flightTable" value="<?php echo $row_tables_edit['id']; ?>" />
         <input type="hidden" name="flightEntryID<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random; ?>" value="<?php echo $row_entries['id']; ?>" />
         </td>
-        <td><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
+        <td><?php echo style_convert($row_entries['brewStyle'],"0",$row_entries['brewCategory']); ?></td>
         <?php for($i=1; $i<$flight_count+1; $i++) { ?>
     	<td class="data"><input type="radio" name="flightNumber<?php if ($action == "add") echo $row_entries['id']; if (($action == "edit") && ($row_flight_number['id'] != "")) echo $row_flight_number['id']; else echo $random; ?>" value="flight<?php echo $i; ?>" <?php if (($action == "add") && ($i == 1)) echo "checked"; if (($action == "edit") && ($row_flight_number['flightNumber'] == $i)) echo "checked"; ?>></td>
 		<?php } ?>

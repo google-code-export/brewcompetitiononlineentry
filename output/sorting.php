@@ -8,12 +8,12 @@ require(DB.'admin_common.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
 
-$query_style = "SELECT brewStyleGroup FROM styles WHERE brewStyleActive='Y'";
-if ($filter !="default") $query_style .= " AND brewStyleGroup='$filter'";
+$query_style = "SELECT style_cat FROM $styles_active WHERE style_active='1'";
+if ($filter !="default") $query_style .= " AND style_cat='$filter'";
 $style = mysql_query($query_style, $brewing) or die(mysql_error());
 $row_style = mysql_fetch_assoc($style);
 
-do { $s[] = $row_style['brewStyleGroup']; } while ($row_style = mysql_fetch_assoc($style));
+do { $s[] = $row_style['style_cat']; } while ($row_style = mysql_fetch_assoc($style));
 sort($s);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -58,10 +58,12 @@ if ($totalRows_entries > 0) {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[4,'asc'],[3,'asc'],[0,'asc']],
+			"aaSorting": [[5,'asc'],[0,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				null,
+				null,
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
@@ -77,6 +79,7 @@ if ($totalRows_entries > 0) {
     <thead>
     <tr>
     	<th width="1%" class="dataHeading bdr1B">Entry #</th>
+    	<th width="1%" class="dataHeading bdr1B">Judging #</th>
         <th width="20%" class="dataHeading bdr1B">Brewer</th>
         <th class="dataHeading bdr1B">Entry Name</th>
         <th width="20%" class="dataHeading bdr1B">Style</th>
@@ -84,6 +87,7 @@ if ($totalRows_entries > 0) {
         <th width="5%" class="dataHeading bdr1B">Contact</th>
         <th width="1%" class="dataHeading bdr1B">Paid?</th>
         <th width="1%" class="dataHeading bdr1B">Sorted?</th>
+        <th width="1%" class="dataHeading bdr1B">Labeled?</th>
     </tr>
     </thead>
     <tbody>
@@ -92,12 +96,14 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php if ($row_entries['id'] < 100) echo "0"; echo $row_entries['id']; ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%05s",$row_entries['brewJudgingNumber']); ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if ($row_entries['brewCoBrewer'] != "") echo "<br>".$row_entries['brewCoBrewer']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewName']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewStyle']; ?></td>
         <td class="data bdr1B_gray"><?php echo $row_entries['brewSubCategory']; ?></td>
         <td class="data bdr1B_gray"><?php echo $brewer_info[2]."<br>".$brewer_info[6]; ?></td>
+        <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
     </tr>
@@ -120,11 +126,6 @@ if ($totalRows_entries > 0) {
 			"aoColumns": [
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -135,7 +136,7 @@ if ($totalRows_entries > 0) {
     <tr>
     	<th width="10%" class="dataHeading bdr1B">Entry #</th>
         <th width="10%" class="dataHeading bdr1B">Judging #</th>
-        <th class="dataHeading bdr1B">Label Affixed?</th>
+        <th class="dataHeading bdr1B">Labeled?</th>
     </tr>
     </thead>
     <tbody>
@@ -144,8 +145,8 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-        <td class="data bdr1B_gray"><?php echo $row_entries['id']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_entries['brewJudgingNumber']; ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td class="data bdr1B_gray"><?php echo sprintf("%05s",$row_entries['brewJudgingNumber']); ?></td>
         <td class="data bdr1B_gray"><p class="box_small">&nbsp;</p></td>
     </tr>
     <?php } while ($row_entries = mysql_fetch_assoc($entries)); ?>

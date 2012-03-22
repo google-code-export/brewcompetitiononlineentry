@@ -11,7 +11,7 @@
     </tr>
     <tr>
       <td width="10%" class="dataLabel">BJCP Judge Rank:</td>
-      <td colspan="2" class="data">If you have taken the BJCP beer exam, the Mead Judge designation is an <em>endorsement</em> - indicate below your judge rank. If you have not taken the BJCP beer exam, choose BJCP - Mead Judge.
+      <td colspan="2" class="data">If you have taken the BJCP beer exam, the Mead Judge designation is an <em>endorsement</em> - indicate below your judge rank. If you <em>are</em> a Mead Judge, but <em>have not taken</em> the BJCP beer exam, choose BJCP - Mead Judge.
       </td>
     </tr>
 	<tr>
@@ -43,8 +43,8 @@
         	<?php do { 	?>
             <tr>
             	<td width="1%"><input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
-                <td width="1%"><?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].":"; ?></td>
-                <td><?php echo $row_styles['brewStyle']; ?></td>
+                <td width="1%"><?php echo ltrim($row_styles['style_cat'], "0").$row_styles['style_subcat'].":"; ?></td>
+                <td><?php echo $row_styles['style_name']; ?></td>
             </tr>
             <?php } while ($row_styles = mysql_fetch_assoc($styles)); ?>
         </table>
@@ -60,7 +60,7 @@
         	<?php do { ?>
             <tr>
             	<td width="1%"><input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } ?>></td>
-                <td width="1%"><?php echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].":"; ?></td>
+                <td width="1%"><?php echo ltrim($row_styles2['style_cat'], "0").$row_styles2['style_subcat'].":"; ?></td>
                 <td><?php echo $row_styles2['brewStyle']; ?></td>
             </tr>
             <?php } while ($row_styles2 = mysql_fetch_assoc($styles2)); ?>

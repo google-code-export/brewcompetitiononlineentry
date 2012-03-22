@@ -29,13 +29,13 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "steward
 
 // Viewing assigned judges query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "assignJudges") && ($dbTable == "default")) { 
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentJudge='1' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 	}
 
 // Viewing assigned stewards query
 elseif (($section == "admin") && ($go == "participants") && ($filter == "assignStewards") && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentSteward='1' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default"))  $query_brewer .= " LIMIT $start, $display";
 	}
 
@@ -47,13 +47,13 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "default
 
 // Updating assigned judges query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "update")) {
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentJudge='1' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 	}
 
 // Updating assigned stewards query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) {
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentSteward='1' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 	}
 
@@ -78,23 +78,23 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && 
 // Assign BOS judges query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "bos")  && ($dbTable == "default") && ($action == "assign")) {
 	//$query_brewer = "SELECT * FROM brewer WHERE (brewerJudgeRank='Certified' OR brewerJudgeRank='National' OR brewerJudgeRank LIKE '%Master%') ORDER BY brewerLastName ";
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentJudge='1' ORDER BY brewerLastName";
 	if (($totalRows_participant_count > $row_prefs['prefsRecordLimit']) && ($view == "default")) $query_brewer .= " LIMIT $start, $display";
 	}
 
 // Assigned judges at table query	
 elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges")  && ($dbTable == "default")) { 
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentJudge='1' ORDER BY brewerLastName";
 	}
 
 // Assigned stewards query
 elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewards")  && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentSteward='1' ORDER BY brewerLastName";
 	}
 	
 // Assigned staff query
-elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "stewards")  && ($dbTable == "default")) {
-	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignment='S' ORDER BY brewerLastName";
+elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "staff")  && ($dbTable == "default")) {
+	$query_brewer = "SELECT * FROM brewer WHERE brewerAssignmentStaff='1' ORDER BY brewerLastName";
 	}
 
 // Make a participant an admin query

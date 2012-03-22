@@ -36,10 +36,10 @@ mysql_select_db($database, $brewing);
 $query_sql = "SELECT brewerFirstName, brewerLastName, brewerEmail"; 
 if ($filter == "judges") $query_sql .= ", brewerJudgeLikes, brewerJudgeDislikes";
 $query_sql .= " FROM brewer";
-if (($filter == "judges") && ($section == "admin"))   $query_sql .= " WHERE brewerAssignment='J'";
-if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignment='J' AND brewerJudgeAssignedLocation='$bid'";
-if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignment='S'";
-if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignment='S' AND brewerStewardAssignedLocation='$bid'";
+if (($filter == "judges") && ($section == "admin"))   $query_sql .= " WHERE brewerAssignmentJudge='1'";
+if (($filter == "judges") && ($section == "loc"))   $query_sql .= " WHERE brewerAssignmentJudge='1' AND brewerJudgeAssignedLocation='$bid'";
+if (($filter == "stewards") && ($section == "admin")) $query_sql .= " WHERE brewerAssignmentSteward='1'";
+if (($filter == "stewards") && ($section == "loc")) $query_sql .= " WHERE brewerAssignmentSteward='1' AND brewerStewardAssignedLocation='$bid'";
 $sql = mysql_query($query_sql, $brewing) or die(mysql_error());
 $row_sql = mysql_fetch_assoc($sql);
 

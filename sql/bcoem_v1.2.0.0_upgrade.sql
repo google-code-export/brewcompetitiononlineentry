@@ -385,5 +385,5 @@ ALTER TABLE `brewer` CHANGE `brewerStewardLocation` `brewerStewardLocation` TEXT
 ALTER TABLE `brewer` CHANGE `brewerJudgeAssignedLocation` `brewerJudgeAssignedLocation` TEXT NULL DEFAULT NULL;
 ALTER TABLE `brewer` CHANGE `brewerStewardAssignedLocation` `brewerStewardAssignedLocation` TEXT NULL DEFAULT NULL;
 
-ALTER TABLE `styles` CHANGE  `brewStyleGroup`  `brewStyleGroup` VARCHAR( 3 ) NULL DEFAULT NULL;
-ALTER TABLE `styles` CHANGE  `brewStyleNum`  `brewStyleNum` VARCHAR( 3 ) NULL DEFAULT NULL;
+ALTER TABLE `styles` CHANGE  `style_cat`  `style_cat` VARCHAR( 3 ) NULL DEFAULT NULL;
+ALTER TABLE `styles` CHANGE  `style_subcat`  `style_subcat` VARCHAR( 3 ) NULL DEFAULT NULL;

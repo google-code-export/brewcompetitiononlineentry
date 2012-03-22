@@ -3,6 +3,7 @@
 
 # Connect to the DB
 mysql_select_db($database, $brewing);
+include (DB.'archive.db.php');
 
 $query_contest_info = "SELECT * FROM contest_info WHERE id=1";
 $contest_info = mysql_query($query_contest_info, $brewing) or die(mysql_error());
@@ -13,6 +14,21 @@ $query_prefs = "SELECT * FROM preferences WHERE id=1";
 $prefs = mysql_query($query_prefs, $brewing) or die(mysql_error());
 $row_prefs = mysql_fetch_assoc($prefs);
 $totalRows_prefs = mysql_num_rows($prefs);
+
+$query_exists = "SELECT version FROM system";
+$result	= mysql_query($query_exists);
+//if ($result) {
+	$query_system = "SELECT * FROM system WHERE id=1";
+	$system = mysql_query($query_system, $brewing) or die(mysql_error());
+	$row_system = mysql_fetch_assoc($system);
+	$totalRows_system = mysql_num_rows($system);
+	
+	$query_styles_active = "SELECT * FROM styles_index WHERE style_active='1'";
+	$styles_active = mysql_query($query_styles_active, $brewing) or die(mysql_error());
+	$row_styles_active = mysql_fetch_assoc($styles_active);
+	if ($dbTable == "default") $styles_active = $row_styles_active['style_db_name'];
+	if ($dbTable != "default") $styles_active = $row_archive['archiveStyleSet'];	
+//}
 
 $query_judging_prefs = "SELECT * FROM judging_preferences WHERE id='1'";
 $judging_prefs = mysql_query($query_judging_prefs, $brewing) or die(mysql_error());

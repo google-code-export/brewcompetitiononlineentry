@@ -25,14 +25,12 @@ if (isset($_GET['tb'])) {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php if ($tb == "default") { ?><meta http-equiv="refresh" content="0;URL=<?php echo "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']."&tb=true"; ?>" /><?php } ?>
 <title><?php echo $row_contest_info['contestName']; ?> organized by <?php echo $row_contest_info['contestHost']; ?></title>
 <link href="../css/print.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script type="text/javascript" src="../js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="../js_includes/thickbox.js"></script>
 </head>
-<body <?php if ($tb == "true") echo "onload=\"javascript:window.print()\""; ?>>
+<body onload="javascript:window.print()">
 <div id="content">
 	<div id="content-inner">
     <?php if ($section != "admin") { ?>
@@ -56,6 +54,7 @@ if (isset($_GET['tb'])) {
 		if ($section == "brew") 	include (SECTIONS.'brew.sec.php');
 		if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
 		if ($section == "list") 	include (SECTIONS.'list.sec.php');
+		if ($section == "admin")	include (ADMIN.'default.admin.php');
 		//if ($section == "judge") 	include (SECTIONS.'judge.sec.php');
 		//if ($section == "user") 	include (SECTIONS.'user.sec.php');
 		//if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');

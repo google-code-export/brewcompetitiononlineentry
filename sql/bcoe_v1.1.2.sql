@@ -16,28 +16,28 @@
 
 CREATE TABLE IF NOT EXISTS `styles` (
   `id` int(8) NOT NULL auto_increment,
-  `brewStyleNum` char(3) character set latin1 default NULL,
+  `style_subcat` char(3) character set latin1 default NULL,
   `brewStyle` varchar(250) character set latin1 default NULL,
-  `brewStyleOG` varchar(20) character set latin1 default NULL,
-  `brewStyleOGMax` varchar(25) character set latin1 default NULL,
-  `brewStyleFG` varchar(20) character set latin1 default NULL,
-  `brewStyleFGMax` varchar(25) character set latin1 default NULL,
-  `brewStyleABV` varchar(250) character set latin1 default NULL,
-  `brewStyleABVMax` varchar(25) character set latin1 default NULL,
-  `brewStyleIBU` varchar(250) character set latin1 default NULL,
-  `brewStyleIBUMax` varchar(25) character set latin1 default NULL,
-  `brewStyleSRM` varchar(250) character set latin1 default NULL,
-  `brewStyleSRMMax` varchar(25) character set latin1 default NULL,
-  `brewStyleType` varchar(25) character set latin1 default NULL,
-  `brewStyleInfo` text character set latin1,
-  `brewStyleLink` varchar(200) character set latin1 default NULL,
-  `brewStyleGroup` char(2) character set latin1 default NULL,
+  `style_og_min` varchar(20) character set latin1 default NULL,
+  `style_og_max` varchar(25) character set latin1 default NULL,
+  `style_fg_min` varchar(20) character set latin1 default NULL,
+  `style_fg_max` varchar(25) character set latin1 default NULL,
+  `style_abv_min` varchar(250) character set latin1 default NULL,
+  `style_abv_max` varchar(25) character set latin1 default NULL,
+  `style_ibu_min` varchar(250) character set latin1 default NULL,
+  `style_ibu_max` varchar(25) character set latin1 default NULL,
+  `style_srm_min` varchar(250) character set latin1 default NULL,
+  `style_srm_max` varchar(25) character set latin1 default NULL,
+  `style_type` varchar(25) character set latin1 default NULL,
+  `style_info` text character set latin1,
+  `style_link` varchar(200) character set latin1 default NULL,
+  `style_cat` char(2) character set latin1 default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM;
 
 -- 2008 BJCP Styles
 
-INSERT INTO `styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`) VALUES
+INSERT INTO `styles` (`id`, `style_subcat`, `brewStyle`, `style_og_min`, `style_og_max`, `style_fg_min`, `style_fg_max`, `style_abv_min`, `style_abv_max`, `style_ibu_min`, `style_ibu_max`, `style_srm_min`, `style_srm_max`, `style_type`, `style_info`, `style_link`, `style_cat`) VALUES
 (1, 'A', 'Lite American Lager', '1.028', '1.040', '0.998', '1.008', '3.2', '4.2', '08', '12', '02', '03', 'Lager', 'A lower gravity and lower calorie beer than standard international lagers. Strong flavors are a fault. Designed to appeal to the broadest range of the general public as possible.<p>Commercial Examples: Bitburger Light, Sam Adams Light, Heineken Premium Light, Miller Lite, Bud Light, Coors Light, Baltika #1 Light, Old Milwaukee Light, Amstel Light. </p>', 'http://www.bjcp.org/2008styles/style01.php#1a', '01'),
 (2, 'B', 'Standard American Lager', '1.040', '1.050', '1.004', '1.010', '4.2', '5.3', '08', '15', '02', '04', 'Lager', 'Strong flavors are a fault. An international style including the standard mass-market lager from most countries.<p>Commercial Examples: Pabst Blue Ribbon, Miller High Life, Budweiser, Baltika #3 Classic, Kirin Lager, Grain Belt Premium Lager, Molson Golden, Labatt Blue, Coors Original, Foster&rsquo;s Lager.</p>', 'http://www.bjcp.org/2008styles/style01.php#1b', '01'),
 (3, 'C', 'Premium American Lager', '1.046', '1.056', '1.008', '1.012', '4.6', '6.0', '15', '25', '02', '06', 'Lager', 'Premium beers tend to have fewer adjuncts than standard/lite lagers, and can be all-malt. Strong flavors are a fault, but premium lagers have more flavor than standard/lite lagers. A broad style of international mass-market lagers ranging from up-scale American lagers to the typical ''import'' or ''green bottle'' international beers found in America.<p>Commercial Examples: Full Sail Session Premium Lager, Miller Genuine Draft, Corona Extra, Michelob, Coors Extra Gold, Birra Moretti, Heineken, Beck&rsquo;s, Stella Artois, Red Stripe, Singha.</p>', 'http://www.bjcp.org/2008styles/style01.php#1c', '01'),
@@ -115,7 +115,7 @@ INSERT INTO `styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleOG`, `brewSty
 (75, 'A', 'Spice, Herb, or Vegetable Beer', '', '', '', '', '', '', '', '', '', '', 'Ale', 'A harmonious marriage of spices, herbs and/or vegetables and beer. The key attributes of the underlying style will be different with the addition of spices, herbs and/or vegetables; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and balance of the resulting combination.<p>Commercial Examples: Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Fraoch Heather Ale, Southampton Pumpkin Ale, Rogue Hazelnut Nectar, Hitachino Nest Real Ginger Ale, Breckenridge Vanilla Porter, Left Hand JuJu Ginger Beer, Dogfish Head Punkin Ale, Dogfish Head Midas Touch, Redhook Double Black Stout, Buffalo Bill''s Pumpkin Ale,  BluCreek Herbal Ale, Christian Moerlein Honey Almond,  Rogue Chocolate Stout, Birrificio Baladin Nora, Cave Creek Chili Beer.</p>', 'http://www.bjcp.org/2008styles/style21.php#1a', '21'),
 (76, 'B', 'Christmas/Winter Specialty Spiced Beer', '', '', '', '', '', '', '', '', '', '', 'Ale', 'A stronger, darker, spiced beer that often has a rich body and warming finish suggesting a good accompaniment for the cold winter season.<p>Commercial Examples: Anchor Our Special Ale, Harpoon Winter Warmer, Weyerbacher Winter Ale, Nils Oscar Jul&ouml;l, Goose Island Christmas Ale, North Coast Wintertime Ale, Great Lakes Christmas Ale, Lakefront Holiday Spice Lager Beer, Samuel Adams Winter Lager, Troegs The Mad Elf, Jamtlands Jul&ouml;l.</p>', 'http://www.bjcp.org/2008styles/style21.php#1b', '21'),
 (77, 'A', 'Classic Rauchbier', '1.050', '1.057', '1.012', '1.016', '4.8', '6.0', '20', '30', '12', '22', 'Ale', 'M&auml;rzen/Oktoberfest-style beer with a sweet, smoky aroma and flavor and a somewhat darker color.<p>Commercial Examples: Schlenkerla Rauchbier M&auml;rzen, Kaiserdom Rauchbier, Eisenbahn Rauchbier, Victory Scarlet Fire Rauchbier, Spezial Rauchbier M&auml;rzen, Saranac Rauchbier.</p>', 'http://www.bjcp.org/2008styles/style22.php#1a', '22');
-INSERT INTO `styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`) VALUES
+INSERT INTO `styles` (`id`, `style_subcat`, `brewStyle`, `style_og_min`, `style_og_max`, `style_fg_min`, `style_fg_max`, `style_abv_min`, `style_abv_max`, `style_ibu_min`, `style_ibu_max`, `style_srm_min`, `style_srm_max`, `style_type`, `style_info`, `style_link`, `style_cat`) VALUES
 (78, 'B', 'Other Smoked Beer', '', '', '', '', '', '', '', '', '', '', 'Ale', 'This is any beer that is exhibiting smoke as a principle flavor and aroma characteristic other than the Bamberg-style Rauchbier (i.e. beechwood-smoked M&auml;rzen). Balance in the use of smoke, hops and malt character is exhibited by the better examples.<p>Commercial Examples: Alaskan Smoked Porter, O&rsquo;Fallons Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier, Rogue Smoke, Oskar Blues Old Chub, Left Hand Smoke Jumper, Dark Horse Fore Smoked Stout, Magic Hat Jinx. </p>', 'http://www.bjcp.org/2008styles/style22.php#1b', '22'),
 (79, 'C', 'Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', 'Ale', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including any alcoholic products previously in contact with the wood).  The best examples will be smooth, flavorful, well-balanced and well-aged. <em>Beers made using either limited wood aging or products that only provide a subtle background character may be entered in the base beer style categories as long as the wood character isn&rsquo;t prominently featured.</em><p>Commercial Examples: The Lost Abbey Angel&rsquo;s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Bush Prestige, Petrus Aged Pale, Firestone Walker Double Barrel Ale, Dominion Oak Barrel Stout, New Holland Dragons Milk, Great Divide Oak Aged Yeti Imperial Stout, Goose Island Bourbon County Stout, Le Coq Imperial Extra Double Stout, Harviestoun Old Engine Oil Special Reserve, many microbreweries have specialty beers served only on premises often directly from the cask.</p>', 'http://www.bjcp.org/2008styles/style22.php#1c', '22'),
 (80, 'A', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', 'Ale', 'A harmonious marriage of ingredients, processes and beer. The key attributes of the underlying style (if declared) will be atypical due to the addition of special ingredients or techniques; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and harmony of the resulting combination. The overall uniqueness of the process, ingredients used, and creativity should be considered. The overall rating of the beer depends heavily on the inherently subjective assessment of distinctiveness and drinkability.<p>Commercial Examples: Bell&rsquo;s Rye Stout, Bell&rsquo;s Eccentric Ale, Samuel Adams Triple Bock and Utopias, Hair of the Dog Adam, Great Alba Scots Pine, Tommyknocker Maple Nut Brown Ale, Great Divide Bee Sting Honey Ale, Stoudt&rsquo;s Honey Double Mai Bock, Rogue Dad&rsquo;s Little Helper, Rogue Honey Cream Ale, Dogfish Head India Brown Ale, Zum Uerige Sticke and Doppel Sticke Altbier, Yards Brewing Company General Washington Tavern Porter, Rauchenfels Steinbier, Odells 90 Shilling Ale, Bear Republic Red Rocket Ale, Stone Arrogant Bastard.</p>', 'http://www.bjcp.org/2008styles/style23.php#1a', '23'),

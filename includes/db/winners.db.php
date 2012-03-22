@@ -6,34 +6,12 @@
  *              display when NOT using BCOE for competition management.
  */
 
-
-/* Designate query variables depending upon db tables (current or archived)
-if ($section == "past_winners") {
-	$suffix = get_suffix($dbTable);
-	$user_table = "users_".$suffix;
-	$brewer_table = "brewer_".$suffix;
-	$style_types = "style_types_".$suffix;
-	$judging_tables = "judging_tables_".$suffix;
-	$judging_scores = "judging_scores_".$suffix;
-	$judging_scores_bos = "judging_scores_bos_".$suffixd;
-	$judging_locations = "judging_locations_".$suffix;
-	$judging_flights = "judging_flights_".$suffix;
-	$judging_assignments = "judging_tables_".$suffix;
-	}
-else {
-	$dbTable = "brewing";
-	$user_table = "users";
-	$brewer_table = "brewer";
-	$style_types = "style_types";
-	$judging_tables = "judging_tables";
-	$judging_scores = "judging_scores";
-	$judging_scores_bos = "judging_scores_bos";
-	$judging_locations = "judging_locations";
-	$judging_flights = "judging_flights";
-	$judging_assignments = "judging_tables";
-}
-*/
 // General queries if using BCOE for comp organization
+$query_sbi = "SELECT * FROM $sbi_db_table ORDER BY sbi_rank ASC";
+$sbi = mysql_query($query_sbi, $brewing) or die(mysql_error());
+$row_sbi = mysql_fetch_assoc($sbi);
+$totalRows_sbi = mysql_num_rows($sbi);
+
 if ($row_prefs['prefsCompOrg'] == "Y") { 
 	
 	$query_tables = "SELECT * FROM $tables_db_table ORDER BY tableNumber ASC";
@@ -58,7 +36,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 // Use legacy code to display winners if admin chooses not to use BCOE for competition organization
 if ($row_prefs['prefsCompOrg'] == "N") { 
 
-	$query_log_winners = "SELECT * FROM $brewing_db_table WHERE brewWinner='Y' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
+	$query_log_winners = "SELECT * FROM $brewing_db_table WHERE brewWinner='1' ORDER BY brewWinnerCat, brewWinnerSubCat, brewWinnerPlace ASC";
 	$log_winners = mysql_query($query_log_winners, $brewing) or die(mysql_error());
 	$row_log_winners = mysql_fetch_assoc($log_winners);
 	$totalRows_log_winners = mysql_num_rows($log_winners);

@@ -167,7 +167,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
         <td class="data"><?php echo $row_entries_1['brewJudgingNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableNumber']; ?></td>
         <td class="data"><?php echo $row_tables_1['tableName']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries_1['brewCategorySort'],1).": ".$row_entries_1['brewStyle']; ?></td>
+        <td class="data"><?php echo style_convert($row_entries_1['brewStyle'],"0",$row_entries_1['brewCategory']); ?></td>
         <?php if ($dbTable == "default") { ?>
         <td class="data"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="data"><?php echo $row_bos['scorePlace']; ?></td>
@@ -251,7 +251,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
         <?php } ?>
         <td><?php echo $row_enter_bos['eid'];  ?></td>
         <td class="data"><?php echo $row_entries['brewJudgingNumber']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle']; ?></td>
+        <td class="data"><?php echo style_convert($row_entries['brewStyle'],"0",$row_entries['brewCategory']); ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $row_scores['scoreEntry']; ?>" /></td>
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">

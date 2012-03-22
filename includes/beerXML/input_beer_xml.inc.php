@@ -225,7 +225,7 @@ class InputBeerXML {
          $vf["brewBrewerID"] = $_POST["brewBrewerID"];	
 		 require(CONFIG.'config.php');
 		 mysql_select_db($database, $brewing);
-		 $query_style_name = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
+		 $query_style_name = sprintf("SELECT * FROM $styles_active WHERE style_cat='%s' AND style_subcat='%s'", $vf['brewCategorySort'], $vf['brewSubCategory']);
 		 $style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 		 $row_style_name = mysql_fetch_assoc($style_name);														// changed_GH to accomodate club edition
 		 $vf["brewJudgingLocation"] = $row_style_name['brewStyleJudgingLoc'];

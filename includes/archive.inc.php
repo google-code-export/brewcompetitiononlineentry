@@ -102,7 +102,7 @@ $rename_style_types = "RENAME TABLE ".$database.".style_types  TO ".$database.".
 //echo "<p>".$rename_style_types."</p>";
 $result = mysql_query($rename_style_types, $brewing) or die(mysql_error());
 
-// Third, insert a clean "users", "brewer", "brewing", and "sponsors" tables
+// Third, insert "clean" tables
 
 $create_users = "
 CREATE TABLE IF NOT EXISTS `users` (
@@ -147,8 +147,10 @@ CREATE TABLE IF NOT EXISTS `brewer` (
   `brewerStewardLocation` text CHARACTER SET utf8 COLLATE utf8_bin,
   `brewerJudgeAssignedLocation` text CHARACTER SET utf8 COLLATE utf8_bin,
   `brewerStewardAssignedLocation` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `brewerAssignment` char(1) DEFAULT NULL,
+  `brewerAssignmentJudge` char(1) DEFAULT NULL,
+  `brewerAssignmentSteward` char(1) DEFAULT NULL,
   `brewerAssignmentStaff` char(1) DEFAULT NULL,
+  `brewerAssignmentOrganizer` char(1) DEFAULT NULL,
   `brewerAHA` int(11) DEFAULT NULL,
   `brewerDiscount` char(1) DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
   `brewerJudgeBOS` char(1) DEFAULT NULL COMMENT 'Y if judged in BOS round',
@@ -507,7 +509,10 @@ brewerJudgeLocation,
 brewerStewardLocation,
 brewerJudgeAssignedLocation,
 brewerStewardAssignedLocation,
-brewerAssignment,
+brewerAssignmentJudge,
+brewerAssignmentSteward,
+brewerAssignmentStaff,
+brewerAssignmentOrganizer,
 brewerAHA,
 brewerDiscount,
 brewerJudgeBOS

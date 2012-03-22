@@ -28,14 +28,14 @@ if ($filter != "winners") {
 
 $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber FROM brewing";
 
-if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y'"; 
-if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = 'Y' AND brewReceived = 'Y' AND brewJudgingLocation = '$bid'"; 
-if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = 'N' OR brewPaid = '' AND brewReceived = 'Y'"; 
+if (($filter == "paid") && ($bid == "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1'"; 
+if (($filter == "paid") && ($bid != "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation = '$bid'"; 
+if (($filter == "nopay") && ($bid == "default")) $query_sql .= " WHERE brewPaid = '0' AND brewReceived = '1'"; 
 }
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerID";
 
 	if ($filter == "winners") { 
-	if ($row_prefs['prefsCompOrg'] == "N") $query_sql = "SELECT brewing.brewCategory, brewing.brewSubCategory, brewing.brewStyle,  brewing.brewBrewerLastName,  brewing.brewBrewerFirstName,  brewing.brewName, brewing.brewWinner, brewing.brewWinnerPlace, brewing.brewBOSRound, brewing.brewBOSPlace, brewer.brewerFirstName, brewer.brewerLastName FROM brewing LEFT JOIN (brewer) ON ( brewer.brewerFirstName = brewing.brewBrewerFirstName AND brewer.brewerLastName = brewing.brewBrewerLastName ) WHERE brewing.brewWinner = 'Y'";
+	if ($row_prefs['prefsCompOrg'] == "N") $query_sql = "SELECT brewing.brewCategory, brewing.brewSubCategory, brewing.brewStyle,  brewing.brewBrewerLastName,  brewing.brewBrewerFirstName,  brewing.brewName, brewing.brewWinner, brewing.brewWinnerPlace, brewing.brewBOSRound, brewing.brewBOSPlace, brewer.brewerFirstName, brewer.brewerLastName FROM brewing LEFT JOIN (brewer) ON ( brewer.brewerFirstName = brewing.brewBrewerFirstName AND brewer.brewerLastName = brewing.brewBrewerLastName ) WHERE brewing.brewWinner = '1'";
 	if ($row_prefs['prefsCompOrg'] == "Y") $query_sql = "SELECT id,tableNumber,tableName FROM judging_tables ORDER BY tableNumber ASC";
 	}
 

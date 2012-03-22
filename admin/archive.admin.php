@@ -1,4 +1,3 @@
-<?php require(DB.'archive.db.php'); ?>
 <h2>Archive Competition Data</h2>
 <div class="adminSubNavContainer">
 	<span class="adminSubNav">

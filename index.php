@@ -4,19 +4,18 @@
  * Description: This module is the delivery vehicle for all functions.
  * 
  */
-
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', '1');
 require('paths.php');
 require(INCLUDES.'functions.inc.php');
 $php_version = phpversion();
 $today = date('Y-m-d');
 $current_page = "http://".$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'];
 $images_dir = dirname( __FILE__ );
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set('display_errors', '1');
+
 // Check to see if initial setup has taken place 
 if (check_setup()) header ("Location: setup.php?section=step1"); 
-
-
+if (!check_update()) header ("Location: update.php?go=db_update_required"); 
 // If all setup has taken place, run normally
 else 
 {
@@ -28,7 +27,7 @@ require(DB.'common.db.php');
 require(DB.'brewer.db.php');
 require(INCLUDES.'version.inc.php');
 require(INCLUDES.'headers.inc.php');
-
+$version = $row_system['version'];
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,9 +36,35 @@ require(INCLUDES.'headers.inc.php');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $row_contest_info['contestName']; ?> Organized By <?php echo $row_contest_info['contestHost']." &gt; ".$header_output; ?></title>
 <link href="css/<?php echo $row_prefs['prefsTheme']; ?>.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="js_includes/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="js_includes/fancybox/jquery.fancybox.css?v=2.0.2" type="text/css" media="screen" />
+<script type="text/javascript" src="js_includes/fancybox/jquery.fancybox.pack.js?v=2.0.2"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$("#modal_window_link").fancybox({
+				'width'				: '75%',
+				'height'			: '75%',
+				'fitToView'			: false,
+				'scrolling'         : 'auto',
+				'openEffect'		: 'elastic',
+				'closeEffect'		: 'elastic',
+				//'openEasing'     	: 'easeOutBack',
+				//'closeEasing'   	: 'easeInBack',
+				'openSpeed'         : 'normal',
+				'closeSpeed'        : 'normal',
+				'type'				: 'iframe',
+				'helpers' 			: {	title : { type : 'inside' } },
+				<?php if ($modal_window == "false") { ?>
+				'afterClose': 		function() { parent.location.reload(true); }
+				<?php } ?>
+			});
+
+		});
+	</script>
 <script type="text/javascript" src="js_includes/jquery.dataTables.js"></script>
-<script type="text/javascript" src="js_includes/thickbox.js"></script>
 <script type="text/javascript" src="js_includes/delete.js"></script>
 <script type="text/javascript" src="js_includes/calendar_control.js" ></script>
 <script type="text/javascript" src="js_includes/jump_menu.js" ></script>
@@ -147,6 +172,27 @@ if (($section == "admin") || ($section == "brew") || ($section == "brewer") || (
 		if ($section == "beerxml")	include (SECTIONS.'beerxml.sec.php');
 	}
   } // End registration date check.
+  ?>
+<?php if (($row_prefs['prefsShare'] == "Y") && (($section == "default") || ($section == "rules") || ($section == "entry") || ($section == "sponsors"))) { ?>
+<h2>Share <?php echo $row_contest_info['contestName']; ?>
+<!-- Start Shareaholic Sexybookmark HTML-->
+<div class="shr_class shareaholic-show-on-load"></div>
+<!-- End Shareaholic Sexybookmark HTML -->
+<!-- Start Shareaholic Sexybookmark script -->
+<script type="text/javascript">
+var SHRSB_Settings = {"shr_class":{"src":"/css","link":"","service":"5,7,2,52,38,201,88,43,74,53,78,39,40,46,219","apikey":"6ffe2cbf142c45bd4cd03b01ec46b8658","localize":true,"shortener":"google","shortener_key":"","designer_toolTips":true,"twitter_template":"${title} - ${short_link}"}};
+</script>
+
+<script type="text/javascript">
+(function() {
+var sb = document.createElement("script"); sb.type = "text/javascript";sb.async = true;
+sb.src = ("https:" == document.location.protocol ? "https://dtym7iokkjlif.cloudfront.net" : "http://cdn.shareaholic.com") + "/media/js/jquery.shareaholic-publishers-sb.min.js";
+var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(sb, s);
+})();
+</script>
+<!-- End Shareaholic Sexybookmark script -->
+<?php } ?>
+<?php 
   if ((!isset($_SESSION['loginUsername'])) && (($section == "admin") || ($section == "brew") || ($section == "user") || ($section == "judge") || ($section == "list") || ($section == "pay") || ($section == "beerXML"))) { ?>  
   <?php if ($section == "admin") { ?>
   <div id="header">	

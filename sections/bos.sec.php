@@ -108,7 +108,7 @@ if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestB
     
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos['brewWinnerCat'], $row_bos['brewWinnerSubCat']);
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat = '%s' AND style_subcat = '%s'", $row_bos['brewWinnerCat'], $row_bos['brewWinnerSubCat']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -122,7 +122,7 @@ if ($row_contest_info['contestBOSAward'] != "") echo $row_contest_info['contestB
   <?php 
   	echo style_convert($row_bos['brewWinnerCat'],"1"); if ($row_bos['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos['brewWinnerCat']; if ($row_bos['brewWinnerSubCat']!= "") echo $row_bos['brewSubCategory']; echo ")"; } 
   	if ($row_bos['brewWinnerCat'] >= 29) {
-		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos['brewWinnerCat']);  
+		$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat='%s'", $row_bos['brewWinnerCat']);  
     	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		echo ": ".$row_style['brewStyle'];
@@ -158,7 +158,7 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
     
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos3['brewWinnerCat'], $row_bos3['brewWinnerSubCat']);
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat = '%s' AND style_subcat = '%s'", $row_bos3['brewWinnerCat'], $row_bos3['brewWinnerSubCat']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -172,7 +172,7 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
   <?php 
   	echo $row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos3['brewWinnerCat']; if ($row_bos3['brewWinnerSubCat']!= "") echo $row_bos3['brewSubCategory']; echo ")"; } 
   	if ($row_bos3['brewWinnerCat'] >= 29) {
-		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos3['brewWinnerCat']);  
+		$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat='%s'", $row_bos3['brewWinnerCat']);  
     	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		echo ": ".$row_style['brewStyle'];
@@ -208,7 +208,7 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
  <?php do { 
 	mysql_select_db($database, $brewing);
 	//if ($row_log_bos['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_bos2['brewWinnerCat'], $row_bos2['brewWinnerSubCat']);
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat = '%s' AND style_subcat = '%s'", $row_bos2['brewWinnerCat'], $row_bos2['brewWinnerSubCat']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -222,7 +222,7 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
   <?php 
   	echo $row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_bos2['brewWinnerCat']; if ($row_bos2['brewWinnerSubCat']!= "") echo $row_bos2['brewSubCategory']; echo ")"; } 
   	if ($row_bos2['brewWinnerCat'] >= 29) {
-		$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_bos2['brewWinnerCat']);  
+		$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat='%s'", $row_bos2['brewWinnerCat']);  
     	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		echo ": ".$row_style['brewStyle'];
@@ -244,3 +244,69 @@ if (($row_prefs['prefsBOSMead'] == "Y") && ($totalRows_bos3 > 0)) { ?>
   } // end if BOS cider
 } else echo "</h2><p>No BOS places have been entered yet. Please check back later.</p>";
 ?>
+
+
+<?php 
+// Special/Custom "Best of" Display
+if ($totalRows_sbi > 0) { 
+echo "<h2>Other Overall Winners</h2>";
+do { 
+$query_sbd = sprintf("SELECT * FROM %s WHERE sid='%s'",$sbd_db_table,$row_sbi['id']);
+$sbd = mysql_query($query_sbd, $brewing) or die(mysql_error());
+$row_sbd = mysql_fetch_assoc($sbd);
+$totalRows_sbd = mysql_num_rows($sbd);
+
+if ($totalRows_sbd > 0) {
+$random = random_generator(6,2);		
+?>        
+<h3><?php echo $row_sbi['sbi_name']; ?></h3>
+<?php if ($row_sbi['sbi_description'] != "") echo $row_sbi['sbi_description']; ?>
+<script type="text/javascript" language="javascript">
+	 $(document).ready(function() {
+		$('#sortable<?php echo $random; ?>').dataTable( {
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			"aaSorting": [[0,'asc']],
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] }
+				]
+			} );
+		} );
+	</script>
+<table class="dataTable" id="sortable<?php echo $random; ?>">
+<thead>
+	<tr>
+    	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Brewer(s)</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Entry Name</th>
+        <th class="dataList bdr1B" width="25%" nowrap="nowrap">Style</th>
+        <th class="dataList bdr1B">Club</th>
+    </tr>
+</thead>
+<tbody>
+	<?php do { 
+	$brewer_info = explode("^",brewer_info($row_sbd['bid']));
+	$entry_info = explode("^",entry_info($row_sbd['eid']));
+	$style = $entry_info['5'].$entry_info['2'];
+	?>
+	<tr>
+        <td class="data"><?php echo display_place($row_sbd['sbd_place'],1); ?></td>
+        <td class="data"><?php echo $brewer_info['0']." ".$brewer_info['1']; if ($row_entries['brewCoBrewer'] != "") echo "<br>Co-Brewer: ".$entry_info['4']; ?></td>
+        <td class="data"><?php echo $entry_info['0']; ?></td>
+        <td class="data"><?php echo $style." ".style_convert($entry_info['1'],1).": ".$entry_info['3']; ?></td>
+        <td class="data"><?php echo $brewer_info['7']; ?></td>
+    </tr>
+    <?php } while ($row_sbd = mysql_fetch_assoc($sbd)); ?>
+</tbody>
+</table>
+<?php }
+} while ($row_sbi = mysql_fetch_assoc($sbi));
+
+} ?>

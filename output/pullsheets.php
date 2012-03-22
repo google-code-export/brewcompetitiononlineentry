@@ -92,7 +92,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc'],[1,'asc']],
+			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -123,11 +123,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$a = explode(",", $row_tables['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='1' AND brewPaid='1' ORDER BY id", $row_styles['style_name']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -221,11 +221,11 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='1' AND brewPaid='1' ORDER BY id", $row_styles['style_name']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -289,7 +289,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc'],[1,'asc']],
+			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -317,11 +317,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
     <?php 
 	$a = explode(",", $row_tables['tableStyles']); 
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1' ORDER BY id", $row_styles['style_name']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -373,7 +373,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc'],[1,'asc']],
+			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -402,11 +402,11 @@ $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"d
 	$a = explode(",", $row_tables_edit['tableStyles']); 
 	
 	foreach (array_unique($a) as $value) {
-		$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='Y' AND brewPaid='Y' ORDER BY id", $row_styles['brewStyle']);
+		$query_entries = sprintf("SELECT id,brewStyle,brewCategory,brewCategorySort,brewSubCategory,brewInfo,brewMead1,brewMead2,brewMead3,brewJudgingNumber FROM brewing WHERE brewStyle='%s' AND brewReceived='1' AND brewPaid='1' ORDER BY id", $row_styles['style_name']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -473,7 +473,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc'],[1,'asc']],
+			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },
@@ -569,7 +569,7 @@ if ($row_style_type['styleTypeBOS'] == "Y") {
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc'],[1,'asc']],
+			"aaSorting": [[3,'asc'],[2,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
 				{ "asSorting": [  ] },

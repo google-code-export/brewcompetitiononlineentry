@@ -41,8 +41,8 @@ ADD `brewerStewardAssignedLocation` INT( 8 ) NULL,
 ADD `brewerAssignment` CHAR( 1 ) NULL;
 
 ALTER TABLE `styles` 
-ADD `brewStyleActive` CHAR( 1 ) NULL DEFAULT 'Y',
-ADD `brewStyleOwn` VARCHAR( 255 ) NULL DEFAULT 'bcoe',
+ADD `style_active` CHAR( 1 ) NULL DEFAULT 'Y',
+ADD `style_owner` VARCHAR( 255 ) NULL DEFAULT 'bcoe',
 ADD `brewStyleJudgingLoc` INT( 8 ) NULL;
 
 ALTER TABLE `brewing` 

@@ -15,7 +15,6 @@ $flights = mysql_query($query_flights, $brewing) or die(mysql_error());
 $row_flights = mysql_fetch_assoc($flights);
 $total_flights = $row_flights['flightNumber'];
 
-
 function table_round($tid,$round) {
 	include(CONFIG.'config.php');	
 	mysql_select_db($database, $brewing);
@@ -112,11 +111,11 @@ function entry_conflict($bid,$table_styles) {
 	
 	foreach ($b as $style) {
 		
-		$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='%s'", $style);
+		$query_style = sprintf("SELECT style_cat,style_subcat FROM $styles_active WHERE id='%s'", $style);
 		$style = mysql_query($query_style, $brewing) or die(mysql_error());
 		$row_style = mysql_fetch_assoc($style);
 		
-		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $bid, $row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+		$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $bid, $row_style['style_cat'],$row_style['style_subcat']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		
@@ -215,13 +214,13 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles) 
 ?>
 <div class="adminSubNavContainer">
 		<span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Last Name</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
+        	<span class="icon"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=table&amp;tb=view" title="View Assignments by Name">View All <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments By Table</a>
         </span>
         <span class="adminSubNav">
-        	<span class="icon data"><img src="images/monitor.png"  /></span><a class="thickbox" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
+        	<span class="icon data"><img src="images/monitor.png"  /></span><a id="modal_window_link" href="output/assignments.php?section=admin&amp;go=judging_assignments&amp;filter=<?php echo $filter; ?>&amp;view=name&amp;tb=view&amp;id=<?php echo $id; ?>" title="View Assignments by Name">View <?php if ($filter == "stewards") echo "Steward"; else echo "Judge"; ?> Assignments for this Table</a>
         </span>
 </div>
 <div class="info">Make sure you have <a href="index.php?section=admin&go=judging_flights&action=assign&filter=rounds">assigned all tables <?php if ($row_judging_prefs['jPrefsQueued'] == "N") echo "and flights"; ?> to rounds</a> <em>before</em> assigning <?php echo $filter; ?> to a table.
@@ -343,9 +342,20 @@ If no judges are listed below, no judge indicated that they are available for th
 	</tr>
 </thead>
 <tbody>
-<?php do { 
+<?php 
 $table_location = "Y-".$row_tables_edit['tableLocation'];
-if ($filter == "stewards") $locations = explode(",",$row_brewer['brewerStewardLocation']); else $locations = explode(",",$row_brewer['brewerJudgeLocation']);
+//echo $table_location."<br>";
+//echo $totalRows_brewer; 
+do { 
+if ($filter == "stewards") $locations = explode(",",$row_brewer['brewerStewardLocation']); else 
+$locations = explode(",",$row_brewer['brewerJudgeLocation']);
+
+/*
+echo "<p>";
+echo $row_brewer['brewerStewardLocation']."<br>";
+print_r($locations);
+echo "</p>";
+*/
 if (in_array($table_location,$locations)) {
 ?>
 	<tr> 
@@ -364,7 +374,7 @@ if (in_array($table_location,$locations)) {
 		<?php }
 		} // end for loop ?>
     </tr> 
-<?php }
+<?php  }
 } while ($row_brewer = mysql_fetch_assoc($brewer)); 
 ?>	
 </tbody>

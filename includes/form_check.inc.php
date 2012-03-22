@@ -273,7 +273,7 @@ var errormessage = new String();
 // Put field checks below this point.
 if(WithoutContent(document.form1.brewStyle.value))
 	{ errormessage += "\nThe style name"; }
-if(WithoutContent(document.form1.brewStyleType.value))
+if(WithoutContent(document.form1.style_type.value))
 	{ errormessage += "\nThe style type"; }
 // Put field checks above this point.
 if(errormessage.length > 2) {

@@ -10,7 +10,7 @@ require(INCLUDES.'scrubber.inc.php');
 require(CLASSES.'fpdf/pdf_label.php');
 
 if (($go == "entries") && ($action == "bottle-entry")) {
-	$query_log = "SELECT * FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_log = "SELECT * FROM brewing WHERE brewPaid='1' AND brewReceived='1'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -22,22 +22,22 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 	$filename .= ".pdf";
 	$pdf = new PDF_Label('5160'); 
 	$pdf->AddPage();
-	$pdf->SetFont('Arial','',8);
+	$pdf->SetFont('Courier','',8);
 
 	// Print labels
 	do {
 		
-		if ($row_log['id'] < 10) $entry_no = "00".$row_log['id'];
-		elseif (($row_log['id'] >= 10) && ($row_log['id'] < 100)) $entry_no = "0".$row_log['id'];
-		else $entry_no = $row_log['id'];																						  
 		
-		$text = sprintf("\n%s (%s)   %s (%s)   %s (%s)\n\n\n%s (%s)   %s (%s)   %s (%s)",
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
+		$entry_no = sprintf("%04s",$row_log['id']);
+		$category_no = sprintf("%02s",$row_log['brewCategory']);																					  
+		
+		$text = sprintf("\n%s(%s)  %s(%s)  %s(%s)\n\n\n%s(%s)  %s(%s)  %s(%s)",
+		$entry_no, $category_no.$row_log['brewSubCategory'], 
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory']
 		);
 		
 		$pdf->Add_Label($text);
@@ -48,7 +48,7 @@ if (($go == "entries") && ($action == "bottle-entry")) {
 }
 
 if (($go == "entries") && ($action == "bottle-judging")) {
-	$query_log = "SELECT * FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_log = "SELECT * FROM brewing WHERE brewPaid='1' AND brewReceived='1'";
 	if ($filter != "default") $query_log .= sprintf(" AND brewCategorySort='%s'",$filter);
 	$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 	$log = mysql_query($query_log, $brewing) or die(mysql_error());
@@ -61,20 +61,21 @@ if (($go == "entries") && ($action == "bottle-judging")) {
 	$pdf = new PDF_Label('5160'); 
 	
 	$pdf->AddPage();
-	$pdf->SetFont('Arial','',8);
+	$pdf->SetFont('Courier','',8);
 
 	// Print labels
 	do {
 		
-		$entry_no = $row_log['brewJudgingNumber'];																						  
+		$entry_no = sprintf("%05s",$row_log['brewJudgingNumber']);
+		$category_no = sprintf("%02s",$row_log['brewCategory']);																						  
 		
-		$text = sprintf("\n%s (%s)   %s (%s)   %s (%s)\n\n\n%s (%s)   %s (%s)   %s (%s)",
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'], 
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
-		$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
+		$text = sprintf("\n%s(%s)  %s(%s)  %s(%s)\n\n\n%s(%s)  %s(%s)  %s(%s)",
+		$entry_no, $category_no.$row_log['brewSubCategory'], 
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory'],
+		$entry_no, $category_no.$row_log['brewSubCategory']
 		);
 		
 		$pdf->Add_Label($text);
@@ -121,7 +122,7 @@ if (($go == "participants") && ($action == "judging_labels") && ($id == "default
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','',9);
 	
-	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM brewer WHERE brewerAssignment='J' ORDER BY brewerLastName ASC";
+	$query_brewer = "SELECT id,brewerFirstName,brewerLastName,brewerJudgeRank,brewerJudgeID,brewerEmail FROM brewer WHERE brewerAssignmentJudge='1' ORDER BY brewerLastName ASC";
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_assoc($brewer);
 	$totalRows_brewer = mysql_num_rows($brewer);

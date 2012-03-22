@@ -5,20 +5,22 @@
  */
 
 if ($action == "add") {
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
-
+	if ($_POST['tableStyles_M'] != "") $table_styles_M = implode(",",$_POST['tableStyles_M']); else $table_styles_M = $_POST['tableStyles_M'];
+	if ($_POST['tableStyles_C'] != "") $table_styles_C = implode(",",$_POST['tableStyles_C']); else $table_styles_C = $_POST['tableStyles_C'];
+	$table_styles = rtrim($table_styles_M.",".$table_styles_C, ",");
+	//echo $table_styles."<br>";
 	$insertSQL = sprintf("INSERT INTO judging_tables (
-	tableName, 
-	tableStyles, 
-	tableNumber,
-	tableLocation
-  	) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString(capitalize($_POST['tableName']), "text"),
-					   GetSQLValueString($table_styles, "text"),
-					   GetSQLValueString($_POST['tableNumber'], "text"),
-					   GetSQLValueString($_POST['tableLocation'], "text")
-					   );
-
+		tableName, 
+		tableStyles, 
+		tableNumber,
+		tableLocation
+		) VALUES (%s, %s, %s, %s)",
+						   GetSQLValueString(capitalize($_POST['tableName']), "text"),
+						   GetSQLValueString($table_styles, "text"),
+						   GetSQLValueString($_POST['tableNumber'], "text"),
+						   GetSQLValueString($_POST['tableLocation'], "text")
+						   );
+	//echo $insertSQL."<br>";
 	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
 	
@@ -33,17 +35,23 @@ if ($action == "add") {
 	
 	// Add all entries affected entries to Flight1
 	
-	$a = explode(",",$table_styles);
+	$a = explode(",",$table_styles_M);
+	$b = explode(",",$table_styles_C);
 	
+	// Main (M) style set styles
 	foreach (array_unique($a) as $value) {
-	
-		$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM styles WHERE id='%s'", $value);
+		
+		/*
+		$query_styles = sprintf("SELECT style_cat, style_subcat FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
+		*/
 		
-		$query_entries = sprintf("SELECT id FROM brewing WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+		$query_entries = sprintf("SELECT id FROM brewing WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'", $value);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
+		
+		//echo $query_entries."<br>";
 		
 		do {
 			
@@ -65,25 +73,64 @@ if ($action == "add") {
 			
 		} while ($row_entries = mysql_fetch_assoc($entries));
 	}
+	
+	// Custom (C) style set styles
+	foreach (array_unique($b) as $value) {
+		
+		/*
+		$query_styles = sprintf("SELECT style_cat, style_subcat FROM styles_custom WHERE id='%s'", $value);
+		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+		$row_styles = mysql_fetch_assoc($styles);
+		*/
+		
+		$query_entries = sprintf("SELECT id FROM brewing WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'", $value);
+		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
+		$row_entries = mysql_fetch_assoc($entries);
+		
+		//echo $query_entries."<br>";
+		
+		do {
+			
+			$insertSQL = sprintf("INSERT INTO judging_flights (
+				flightTable, 
+				flightNumber, 
+				flightEntryID,
+				flightRound
+  				) VALUES (%s, %s, %s, %s)",
+                       GetSQLValueString($row_table['id'], "text"),
+					   GetSQLValueString("1", "text"),
+					   GetSQLValueString($row_entries['id'], "text"),
+					   GetSQLValueString($rounds, "text")
+					   );
+
+			//echo $insertSQL."<br>";
+			mysql_select_db($database, $brewing);
+  			$Result1 = mysql_query($insertSQL, $brewing) or die(mysql_error());
+			
+		} while ($row_entries = mysql_fetch_assoc($entries));
+	}
+	
 	if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
 	header(sprintf("Location: %s", $insertGoTo));
 }
 
 if ($action == "edit") {
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = "";
+	if ($_POST['tableStyles_M'] != "") $table_styles = implode(",",$_POST['tableStyles_M']); else $table_styles_M = "";
+	if ($_POST['tableStyles_C'] != "") $table_styles = implode(",",$_POST['tableStyles_C']); else $table_styles_C = "";
+	$tables_styles = rtrim($table_styles_M.",".$table_styles_C, ",");
 
 	$updateSQL = sprintf("UPDATE judging_tables SET 
-	tableName=%s, 
-	tableStyles=%s, 
-	tableNumber=%s,
-	tableLocation=%s
-	WHERE id=%s",
-                    
-	GetSQLValueString(capitalize($_POST['tableName']), "text"),
-	GetSQLValueString($table_styles, "text"),
-	GetSQLValueString($_POST['tableNumber'], "text"),
-	GetSQLValueString($_POST['tableLocation'], "text"),
-	GetSQLValueString($id, "text"));
+		tableName=%s, 
+		tableStyles=%s, 
+		tableNumber=%s,
+		tableLocation=%s
+		WHERE id=%s",
+						
+		GetSQLValueString(capitalize($_POST['tableName']), "text"),
+		GetSQLValueString($table_styles, "text"),
+		GetSQLValueString($_POST['tableNumber'], "text"),
+		GetSQLValueString($_POST['tableLocation'], "text"),
+		GetSQLValueString($id, "text"));
 
   	mysql_select_db($database, $brewing);
   	$Result1 = mysql_query($updateSQL, $brewing) or die(mysql_error());
@@ -135,7 +182,7 @@ if ($action == "edit") {
 				$row_table_style = mysql_fetch_assoc($table_style);
 				//echo $query_table_style."<br>";
 				
-				$query_style = sprintf("SELECT id FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+				$query_style = sprintf("SELECT id FROM $styles_active WHERE style_cat='%s' AND style_subcat='%s'", $row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 				$style = mysql_query($query_style, $brewing) or die(mysql_error());
 				$row_style = mysql_fetch_assoc($style);
 				//echo $query_style."<br>";
@@ -163,13 +210,13 @@ if ($action == "edit") {
 				
 				$b[] = 0;
 				
-				$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='%s'", $style_id);
+				$query_style = sprintf("SELECT style_cat,style_subcat FROM $styles_active WHERE id='%s'", $style_id);
 				$style = mysql_query($query_style, $brewing) or die(mysql_error());
 				$row_style = mysql_fetch_assoc($style);
 			
 				//echo $query_style."<br>";
 				
-				$table_style = $row_style['brewStyleGroup'].$row_style['brewStyleNum'];
+				$table_style = $row_style['style_cat'].$row_style['style_subcat'];
 				
 				//echo "Table Style: ".$table_style."<br>";
 				//echo "Entry Style: ".$entry_style."<br>";

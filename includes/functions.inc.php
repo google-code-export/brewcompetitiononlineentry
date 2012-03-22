@@ -14,14 +14,12 @@ if (isset($_GET['pg'])) {
 function display_array_content($arrayname,$method) {
  	$a = "";
  	while(list($key, $value) = each($arrayname)) {
-  		if (is_array($value)) {
-   		$a .= display_array_content($value,'');
-		
-   		}
-  	else $a .= "$value";
-	if ($method == "2") $a .= ", ";
-	if ($method == "1") $a .= "";
-	if ($method == "3") $a .= ",";
+  		if (is_array($value)) { $a .= display_array_content($value,'1'); }
+  		else $a .= "$value";
+		if ($method == "1") $a .= "";
+		if ($method == "2") $a .= ", ";
+		if ($method == "3") $a .= ",";
+		if ($method == "4") $a .= "<br>";
   	}
 	$b = rtrim($a, ",&nbsp;");
  	return $b;
@@ -49,6 +47,11 @@ function check_setup() {
 	else return false;
 }
 
+function check_update() {
+	$query_exists = "SELECT version FROM system WHERE version='1.3.0.0'";
+	$result	= mysql_query($query_exists);
+	if ($result) return true; else return false;
+}
 
 // function to generate random number
 function random_generator($digits,$method){
@@ -334,8 +337,8 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			$row_brewer = mysql_fetch_array($brewer);
 			
 			if ($totalRows_entries > 0) {
-				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+				if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						$a = $entry_discount_number * $special_discount_number;
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
@@ -343,11 +346,11 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		$d = $totalRows_entries * $special_discount_number;
 				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;	
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else $total = $totalRows_entries * $special_discount_number;
-				} // end if ($row_brewer['brewerDiscount'] == "Y")
-				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-					if ($entry_discount == "Y") {
+				} // end if ($row_brewer['brewerDiscount'] == "1")
+				if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+					if ($entry_discount == "1") {
 				 		$a = $entry_discount_number * $entry_fee;
 				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
@@ -356,7 +359,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
 				 	}
 					else $total = $totalRows_entries * $entry_fee;
-				} // end if ($row_brewer['brewerDiscount'] != "Y")
+				} // end if ($row_brewer['brewerDiscount'] != "1")
 				if ($cap_no > 0) {
 					if ($total < $cap_no) $total_calc = $total;
 					if ($total >= $cap_no) $total_calc = $cap_no;
@@ -388,8 +391,8 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		$row_brewer = mysql_fetch_array($brewer);
 			
 		if ($totalRows_entries > 0) {
-				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+				if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						$a = $entry_discount_number * $special_discount_number;
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
@@ -397,12 +400,12 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		$d = $totalRows_entries * $special_discount_number;
 				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;	
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else $total = $totalRows_entries * $special_discount_number;
 					//echo $total."<br>";
-				} // end if ($row_brewer['brewerDiscount'] == "Y")
-				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-					if ($entry_discount == "Y") {
+				} // end if ($row_brewer['brewerDiscount'] == "1")
+				if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+					if ($entry_discount == "1") {
 				 		$a = $entry_discount_number * $entry_fee;
 				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
@@ -411,7 +414,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
 				 	}
 					else $total = $totalRows_entries * $entry_fee;
-				} // end if ($row_brewer['brewerDiscount'] != "Y")
+				} // end if ($row_brewer['brewerDiscount'] != "1")
 				if ($cap_no > 0) {
 					if ($total < $cap_no) $total_calc = $total;
 					if ($total >= $cap_no) $total_calc = $cap_no;
@@ -454,8 +457,8 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			$row_brewer = mysql_fetch_array($brewer);
 			
 			if ($totalRows_entries > 0) {
-				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+				if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						$a = $entry_discount_number * $special_discount_number;
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
@@ -463,11 +466,11 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		$d = $totalRows_entries * $special_discount_number;
 				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;	
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else $total = $totalRows_entries * $special_discount_number;
-				} // end if ($row_brewer['brewerDiscount'] == "Y")
-				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-					if ($entry_discount == "Y") {
+				} // end if ($row_brewer['brewerDiscount'] == "1")
+				if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+					if ($entry_discount == "1") {
 				 		$a = $entry_discount_number * $entry_fee;
 				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
@@ -476,7 +479,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
 				 	}
 					else $total = $totalRows_entries * $entry_fee;
-				} // end if ($row_brewer['brewerDiscount'] != "Y")
+				} // end if ($row_brewer['brewerDiscount'] != "1")
 				if ($cap_no > 0) {
 					if ($total < $cap_no) $total_calc = $total;
 					if ($total >= $cap_no) $total_calc = $cap_no;
@@ -519,7 +522,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'",$id_2);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='1'",$id_2);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
@@ -532,8 +535,8 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 			if ($totalRows_entries > 0) {
 				
-				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+				if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $special_discount_number;
@@ -556,15 +559,15 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $discount_amount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 						}
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else {
 						$total_paid = $totalRows_paid * $special_discount_number;
 					}
-			} // end if ($row_brewer['brewerDiscount'] == "Y")
+			} // end if ($row_brewer['brewerDiscount'] == "1")
 				
 				
-				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-				if ($entry_discount == "Y") {
+				if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+				if ($entry_discount == "1") {
 				 		// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
@@ -583,11 +586,11 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							} 					
-				 		} // end if ($entry_discount == "Y")
+				 		} // end if ($entry_discount == "1")
 					else 
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
-			} // end if ($row_brewer['brewerDiscount'] != "Y")
+			} // end if ($row_brewer['brewerDiscount'] != "1")
 				
 				if (($cap_no > 0) && ($cap_no != "")) {
 					if ($total_paid < $cap_no) $total_calc_paid = $total_paid;
@@ -616,7 +619,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	$row_entries = mysql_fetch_array($entries);
 	$totalRows_entries = $row_entries['count'];
 			
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='1'", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_array($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -631,8 +634,8 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 	$row_brewer = mysql_fetch_array($brewer);
 	//echo "Discount? ".$row_brewer['brewerDiscount']."<br>";
 		if ($totalRows_entries > 0) {
-			if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+			if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $special_discount_number;
@@ -655,14 +658,14 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $discount_amount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 						}
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else {
 						$total_paid = $totalRows_paid * $special_discount_number;
 					}
-			} // end if ($row_brewer['brewerDiscount'] == "Y")
+			} // end if ($row_brewer['brewerDiscount'] == "1")
 				
-			if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-				if ($entry_discount == "Y") {
+			if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+				if ($entry_discount == "1") {
 				 		// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
@@ -681,11 +684,11 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							} 					
-				 		} // end if ($entry_discount == "Y")
+				 		} // end if ($entry_discount == "1")
 					else 
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
-			} // end if ($row_brewer['brewerDiscount'] != "Y")
+			} // end if ($row_brewer['brewerDiscount'] != "1")
 			
 			if ($cap_no > 0) {
 				if ($total_paid < $cap_no) $total_calc_paid = $total_paid;
@@ -723,7 +726,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$row_entries = mysql_fetch_array($entries);
 			$totalRows_entries = $row_entries['count'];
 			
-			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y' AND brewCategorySort='%s'",$id_2,$filter);
+			$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='1' AND brewCategorySort='%s'",$id_2,$filter);
 			$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 			$row_paid = mysql_fetch_array($paid);
 			$totalRows_paid = $row_paid['count'];
@@ -735,8 +738,8 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$row_brewer = mysql_fetch_array($brewer);
 
 			if ($totalRows_entries > 0) {
-				if (($row_brewer['brewerDiscount'] == "Y") && ($special_discount_number != "")) {
-					if ($entry_discount == "Y") { 
+				if (($row_brewer['brewerDiscount'] == "1") && ($special_discount_number != "")) {
+					if ($entry_discount == "1") { 
 						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $special_discount_number;
@@ -759,14 +762,14 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $discount_amount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 						}
-					} // end if ($entry_discount == "Y")
+					} // end if ($entry_discount == "1")
 					else {
 						$total_paid = $totalRows_paid * $special_discount_number;
 					}
-			} // end if ($row_brewer['brewerDiscount'] == "Y")
+			} // end if ($row_brewer['brewerDiscount'] == "1")
 				
-			if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
-				if ($entry_discount == "Y") {
+			if (($row_brewer['brewerDiscount'] != "1") || ((($row_brewer['brewerDiscount'] == "1")) && ($special_discount_number == ""))) {
+				if ($entry_discount == "1") {
 				 		// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
@@ -785,11 +788,11 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							} 					
-				 		} // end if ($entry_discount == "Y")
+				 		} // end if ($entry_discount == "1")
 					else 
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
-			} // end if ($row_brewer['brewerDiscount'] != "Y")
+			} // end if ($row_brewer['brewerDiscount'] != "1")
 				
 			if ($cap_no > 0) {
 				if ($total_paid < $cap_no) $total_calc_paid = $total_paid;
@@ -814,20 +817,20 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 function unpaid_fees($total_not_paid, $discount_amt, $entry_fee, $entry_fee_disc, $cap, $secret, $secret_num) {
 	switch($discount) {
-		case "N": 
-			if (($secret == "Y") && ($secret_num != "")) $entry_total =  $total_not_paid * $secret_num; 
+		case "0": 
+			if (($secret == "1") && ($secret_num != "")) $entry_total =  $total_not_paid * $secret_num; 
 			else $entry_total = $total_not_paid * $entry_fee;
 		break;
-		case "Y":
+		case "1":
 			if ($total_not_paid > $discount_amt) {
-				if (($secret == "Y") && ($secret_num != "")) $reg_fee = $discount_amt * $secret_num;
+				if (($secret == "1") && ($secret_num != "")) $reg_fee = $discount_amt * $secret_num;
 				else $reg_fee = $discount_amt * $entry_fee;
 				$disc_fee = ($total_not_paid - $discount_amt) * $entry_fee_disc;
 				$entry_subtotal = $reg_fee + $disc_fee;
 				}
 			if ($total_not_paid <= $discount_amt) {
-				if (($total_not_paid > 0) && ($secret != "Y")) $entry_total = $total_not_paid * $entry_fee;
-				elseif (($total_not_paid > 0) && ($secret == "Y") && ($secret_num != "")) $entry_total = $total_not_paid * $secret_num;
+				if (($total_not_paid > 0) && ($secret != "1")) $entry_total = $total_not_paid * $entry_fee;
+				elseif (($total_not_paid > 0) && ($secret == "1") && ($secret_num != "")) $entry_total = $total_not_paid * $secret_num;
 				else $entry_subtotal = "0";
 				}
 		break;			
@@ -877,7 +880,7 @@ function total_not_paid_brewer($bid) {
 	$row_all = mysql_fetch_assoc($all);
 	$totalRows_all = $row_all['count'];
 
-	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='Y'", $bid);
+	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewBrewerID='%s' AND brewPaid='1'", $bid);
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$totalRows_paid = $row_paid['count'];
@@ -891,81 +894,127 @@ function total_paid_received($go,$id) {
 	mysql_select_db($database, $brewing);
 	
 	$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing";
-	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='Y' AND brewReceived='Y'";
-	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='Y' AND brewReceived='Y'";
+	if ($go == "judging_scores") $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1'";
+	if ($id != "default") $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1'";
 	$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 	$row = mysql_fetch_array($result);
 	return $row['count'];
 }
 
-function style_convert($number,$type) {
+function style_judge_convert($number) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	
+	$query_styles_active = "SELECT * FROM styles_index WHERE style_active='1'";
+	$styles_active = mysql_query($query_styles_active, $brewing) or die(mysql_error());
+	$row_styles_active = mysql_fetch_assoc($styles_active);
+	$styles_active = $row_styles_active['style_db_name'];
+	
+	$a = explode(",",$number);
+	
+	foreach ($a as $value) {
+		$b = explode("-",$value);
+		if ($b[1] == "C") $styles_active = "styles_custom";
+		else $styles_active = $row_styles_active['style_db_name'];
+		
+		$query_style = "SELECT style_cat,style_subcat,style_name FROM $styles_active WHERE id='$b[0]'"; 
+		$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		if ($b[1] == "C") $style_custom = " (Custom Style)"; else $style_custom = "";
+		$style_convert[] .= ltrim($row_style['style_cat'].$row_style['style_subcat'].": ".$row_style['style_name'].$style_custom,"0");
+		
+		}
+	return $style_convert;
+}
+
+function style_convert($number,$type,$styles_source) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	include(DB.'common.db.php');
+	
+	$query_styles_active = "SELECT * FROM styles_index WHERE style_active='1'";
+	$styles_active = mysql_query($query_styles_active, $brewing) or die(mysql_error());
+	$row_styles_active = mysql_fetch_assoc($styles_active);
+	if ($styles_source == "C") $styles_active = "styles_custom";
+	else $styles_active = $row_styles_active['style_db_name'];	
+	
 	switch ($type) {
+		case "0":			
+		$query_style = "SELECT * FROM $styles_active WHERE id='$number'"; 
+		$style = mysql_query($query_style, $brewing) or die(mysql_error());
+		$row_style = mysql_fetch_assoc($style);
+		//$style_convert = $query_style;
+		$style_convert = $row_style['style_cat']." ".$row_style['style_subcat']." - ".$row_style['style_name'];
+		break;
 		
 		case "1": 
-		switch ($number) {
-			case "01": $style_convert = "Light Lager"; break;
-			case "02": $style_convert = "Pilsner"; break;
-			case "03": $style_convert = "European Amber Lager"; break;
-			case "04": $style_convert = "Dark Lager"; break;
-			case "05": $style_convert = "Bock"; break;
-			case "06": $style_convert = "Light Hybrid Beer"; break;
-			case "07": $style_convert = "Amber Hybrid Beer"; break;
-			case "08": $style_convert = "English Pale Ale"; break;
-			case "09": $style_convert = "Scottish and Irish Ale"; break;
-			case "10": $style_convert = "American Ale"; break;
-			case "11": $style_convert = "English Brown Ale"; break;
-			case "12": $style_convert = "Porter"; break;
-			case "13": $style_convert = "Stout"; break;
-			case "14": $style_convert = "India Pale Ale (IPA)"; break;
-			case "15": $style_convert = "German Wheat and Rye Beer"; break;
-			case "16": $style_convert = "Belgian and French Ale"; break;
-			case "17": $style_convert = "Sour Ale"; break;
-			case "18": $style_convert = "Belgian Strong Ale"; break;
-			case "19": $style_convert = "Strong Ale"; break;
-			case "20": $style_convert = "Fruit Beer"; break;
-			case "21": $style_convert = "Spice/Herb/Vegatable Beer"; break;
-			case "22": $style_convert = "Smoke-Flavored and Wood-Aged Beer"; break;
-			case "23": $style_convert = "Specialty Beer"; break;
-			case "24": $style_convert = "Traditional Mead"; break;
-			case "25": $style_convert = "Melomel (Fruit Mead)"; break;
-			case "26": $style_convert = "Other Mead"; break;
-			case "27": $style_convert = "Standard Cider and Perry"; break;
-			case "28": $style_convert = "Specialty Cider and Perry"; break;
-			default: $style_convert = "Custom Style"; break;
-		}
+		if ($styles_active == "styles_bjcp_2008") {
+			switch ($number) {
+				case "01": $style_convert = "Light Lager"; break;
+				case "02": $style_convert = "Pilsner"; break;
+				case "03": $style_convert = "European Amber Lager"; break;
+				case "04": $style_convert = "Dark Lager"; break;
+				case "05": $style_convert = "Bock"; break;
+				case "06": $style_convert = "Light Hybrid Beer"; break;
+				case "07": $style_convert = "Amber Hybrid Beer"; break;
+				case "08": $style_convert = "English Pale Ale"; break;
+				case "09": $style_convert = "Scottish and Irish Ale"; break;
+				case "10": $style_convert = "American Ale"; break;
+				case "11": $style_convert = "English Brown Ale"; break;
+				case "12": $style_convert = "Porter"; break;
+				case "13": $style_convert = "Stout"; break;
+				case "14": $style_convert = "India Pale Ale (IPA)"; break;
+				case "15": $style_convert = "German Wheat and Rye Beer"; break;
+				case "16": $style_convert = "Belgian and French Ale"; break;
+				case "17": $style_convert = "Sour Ale"; break;
+				case "18": $style_convert = "Belgian Strong Ale"; break;
+				case "19": $style_convert = "Strong Ale"; break;
+				case "20": $style_convert = "Fruit Beer"; break;
+				case "21": $style_convert = "Spice/Herb/Vegatable Beer"; break;
+				case "22": $style_convert = "Smoke-Flavored and Wood-Aged Beer"; break;
+				case "23": $style_convert = "Specialty Beer"; break;
+				case "24": $style_convert = "Traditional Mead"; break;
+				case "25": $style_convert = "Melomel (Fruit Mead)"; break;
+				case "26": $style_convert = "Other Mead"; break;
+				case "27": $style_convert = "Standard Cider and Perry"; break;
+				case "28": $style_convert = "Specialty Cider and Perry"; break;
+			}
+		} else $style_convert = $row_style['style_cat']." ".$row_style['style_subcat']." - ".$row_style['style_name'];
 		break;
 		
 		case "2":
-		switch ($number) {
-			case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
-			case "02": $style_convert = "2A,2B,2C"; break;
-			case "03": $style_convert = "3A,3B"; break;
-			case "04": $style_convert = "4A,4B,4C"; break;
-			case "05": $style_convert = "5A,5B,5C,5D"; break;
-			case "06": $style_convert = "6A,6B,6C,6D"; break;
-			case "07": $style_convert = "7A,7B,7C"; break;
-			case "08": $style_convert = "8A,8B,8C"; break;
-			case "09": $style_convert = "9A,9B,9C,9D,9E"; break;
-			case "10": $style_convert = "10A,10B,10C"; break;
-			case "11": $style_convert = "11A,11B,11C"; break;
-			case "12": $style_convert = "12A,12B,12C"; break;
-			case "13": $style_convert = "13A,13B,13C,13D,13E,13F"; break;
-			case "14": $style_convert = "14A,14B,14C,"; break;
-			case "15": $style_convert = "15A,15B,15C,15D,"; break;
-			case "16": $style_convert = "16A,16B,16C,16D,16E,"; break;
-			case "17": $style_convert = "17A,17B,17C,17D,17E,17F"; break;
-			case "18": $style_convert = "18A,18B,18C,18D,18E,"; break;
-			case "19": $style_convert = "19A,19B,19C,"; break;
-			case "20": $style_convert = "20"; break;
-			case "21": $style_convert = "21A,21B"; break;
-			case "22": $style_convert = "22A,22B,22C"; break;
-			case "23": $style_convert = "23"; break;
-			case "24": $style_convert = "24A,24B,24C"; break;
-			case "25": $style_convert = "25A,25B,25C"; break;
-			case "26": $style_convert = "25A,25B,26C"; break;
-			case "27": $style_convert = "27A,27B,27C,27D,27E"; break;
-			case "28": $style_convert = "28A,28B,28C,28D"; break;
-			default: $style_convert = "Custom Style"; break;
+		if ($styles_active == "styles_bjcp_2008") {
+			switch ($number) {
+				case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
+				case "02": $style_convert = "2A,2B,2C"; break;
+				case "03": $style_convert = "3A,3B"; break;
+				case "04": $style_convert = "4A,4B,4C"; break;
+				case "05": $style_convert = "5A,5B,5C,5D"; break;
+				case "06": $style_convert = "6A,6B,6C,6D"; break;
+				case "07": $style_convert = "7A,7B,7C"; break;
+				case "08": $style_convert = "8A,8B,8C"; break;
+				case "09": $style_convert = "9A,9B,9C,9D,9E"; break;
+				case "10": $style_convert = "10A,10B,10C"; break;
+				case "11": $style_convert = "11A,11B,11C"; break;
+				case "12": $style_convert = "12A,12B,12C"; break;
+				case "13": $style_convert = "13A,13B,13C,13D,13E,13F"; break;
+				case "14": $style_convert = "14A,14B,14C,"; break;
+				case "15": $style_convert = "15A,15B,15C,15D,"; break;
+				case "16": $style_convert = "16A,16B,16C,16D,16E,"; break;
+				case "17": $style_convert = "17A,17B,17C,17D,17E,17F"; break;
+				case "18": $style_convert = "18A,18B,18C,18D,18E,"; break;
+				case "19": $style_convert = "19A,19B,19C,"; break;
+				case "20": $style_convert = "20"; break;
+				case "21": $style_convert = "21A,21B"; break;
+				case "22": $style_convert = "22A,22B,22C"; break;
+				case "23": $style_convert = "23"; break;
+				case "24": $style_convert = "24A,24B,24C"; break;
+				case "25": $style_convert = "25A,25B,25C"; break;
+				case "26": $style_convert = "25A,25B,26C"; break;
+				case "27": $style_convert = "27A,27B,27C,27D,27E"; break;
+				case "28": $style_convert = "28A,28B,28C,28D"; break;
+				default: $style_convert = "Custom Style"; break;
+			}
 		}
 		break;
 		
@@ -996,15 +1045,7 @@ function style_convert($number,$type) {
 		break;
 		
 		case "4":
-		$a = explode(",",$number);
-		include(CONFIG.'config.php');
-	    mysql_select_db($database, $brewing);
-		foreach ($a as $value) {
-			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
-			$style = mysql_query($query_style, $brewing) or die(mysql_error());
-			$row_style = mysql_fetch_assoc($style);
-			$style_convert[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
-		}
+		
 		break;
 		
 		case "5":
@@ -1017,13 +1058,14 @@ function style_convert($number,$type) {
 		include(CONFIG.'config.php');
 	    mysql_select_db($database, $brewing);
 		foreach ($a as $value) {
-			$query_style = "SELECT brewStyleGroup,brewStyleNum FROM styles WHERE id='$value'"; 
+			$query_style = "SELECT style_cat,style_subcat FROM $styles_active WHERE id='$value'"; 
 			$style = mysql_query($query_style, $brewing) or die(mysql_error());
 			$row_style = mysql_fetch_assoc($style);
-			$style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+			$style_convert1[] = ltrim($row_style['style_cat'],"0").$row_style['style_subcat'];
 		}
 		$style_convert = rtrim(display_array_content($style_convert1,'3'),",");
 		break;
+		
 	}
 	return $style_convert;
 }
@@ -1031,7 +1073,7 @@ function style_convert($number,$type) {
 function get_table_info($input,$method,$id,$dbTable,$param) {	
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	
+	include(DB.'common.db.php');
 	include(INCLUDES.'db_tables.inc.php');
 	
 	$query_table = "SELECT * FROM $tables_db_table";
@@ -1056,7 +1098,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	
 	if ($method == "unassigned") {
 		$return = "";
-		$query_styles = "SELECT id,brewStyle FROM styles";
+		$query_styles = "SELECT id,style_name FROM $styles_active";
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
@@ -1070,7 +1112,7 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			//echo "<p>-".$value."-</p>";
 			if (in_array($value,$b)) { 
 				echo "Yes. The style ID is $value.<br>";
-				//$query_styles1 = "SELECT brewStyle FROM styles WHERE id='$value'";
+				//$query_styles1 = "SELECT style_name FROM $styles_active WHERE id='$value'";
 				//$styles1 = mysql_query($query_styles1, $brewing) or die(mysql_error());
 				//$row_styles1 = mysql_fetch_assoc($styles1);
 				//echo "<p>".$row_styles1['brewStyle']."</p>";
@@ -1107,11 +1149,12 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			foreach ($a as $value) {
 				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT * FROM styles WHERE id='$value'";
+				if (strpos($value,"-M") !== false) $styles = $styles_active; else $styles = "styles_custom";
+				$query_styles = "SELECT style_name FROM $styles WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$c[] = ltrim($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'],"0").",&nbsp;";
+				$c[] = $row_styles['style_name'].",&nbsp;";
 			}
 	$d = array($c);
 	return $d;
@@ -1123,11 +1166,11 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			foreach ($a as $value) {
 				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
-				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-				$row_styles = mysql_fetch_assoc($styles);
+				//$query_styles = "SELECT id FROM $styles_active WHERE id='$value'";
+				//$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				//$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'", $value);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1144,11 +1187,11 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			foreach ($a as $value) {
 				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
-				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
-				$row_styles = mysql_fetch_assoc($styles);
+				//$query_styles = "SELECT style_name FROM $styles_active WHERE id='$value'";
+				//$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+				//$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'", $value);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1161,18 +1204,16 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 	
 	
 	if ($method == "count") {
-	include(CONFIG.'config.php');
+	
 	mysql_select_db($database, $brewing);
-	$query_style = "SELECT brewStyle FROM styles WHERE brewStyle='$input'";
+	$query_style = "SELECT id FROM $styles_active WHERE id='$input'";
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	//echo $query_style."<br>";
 	
-	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'",$row_style['brewStyle']);
+	$query = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'",$row_style['id']);
 	$result = mysql_query($query, $brewing) or die(mysql_error());
 	$num_rows = mysql_fetch_array($result);
-	// echo $query;
-	//$num_rows = mysql_num_rows($result);
 	return $num_rows['count'];
 	}
 	
@@ -1181,11 +1222,11 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 			foreach ($a as $value) {
 				include(CONFIG.'config.php');
 				mysql_select_db($database, $brewing);
-				$query_styles = "SELECT brewStyle FROM styles WHERE id='$value'";
+				$query_styles = "SELECT style_name FROM $styles_active WHERE id='$value'";
 				$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 				$row_styles = mysql_fetch_assoc($styles);
 				
-				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyle']);
+				$query_style_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewStyle='%s' AND brewPaid='1' AND brewReceived='1'", $row_styles['style_name']);
 				$style_count = mysql_query($query_style_count, $brewing) or die(mysql_error());
 				$row_style_count = mysql_fetch_assoc($style_count);
 				$totalRows_style_count = $row_style_count['count'];
@@ -1338,7 +1379,7 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	if ($method == "thickbox") { $suffix = '&KeepThis=true&TB_iframe=true&height=450&width=900'; $class = 'class="menuItem thickbox"'; }
+	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
 	
 	if ($method == "none") { $suffix = "";  $class = 'class="menuItem"'; }
 	
@@ -1346,27 +1387,32 @@ function style_choose($section,$go,$action,$filter,$script_name,$method) {
 	
 	$style_choose = '<div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, \'menu_categories'.$random.'\');">Select Below...</a></div>';
 	$style_choose .= '<div id="menu_categories'.$random.'" class="menu" onmouseover="menuMouseover(event)">';
-	for($i=1; $i<29; $i++) { 
-		if ($i <= 9) $num = "0".$i; else $num = $i;
-		$query_entry_count = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategory='$i'";
+	
+	$query_styles = "SELECT style_name,style_cat FROM $styles_active";
+	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
+	$row_styles = mysql_fetch_assoc($styles);
+	$totalRows_styles = mysql_num_rows($styles);
+	
+	do { 
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategorySort='%s'",$row_styles['style_cat']);
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
-		//if ($num == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; }
+		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['style_cat'].$suffix.'" title="Print '.$row_styles['style_name'].'">'.$row_styles['style_cat'].' '.$row_styles['style_name'].' ('.$row['count'].' entries)</a>'; } 
 		mysql_free_result($result);
-	}
+	} while ($row_styles = mysql_fetch_assoc($styles));
+	mysql_free_result($styles);
 	
-	$query_styles = "SELECT brewStyle,brewStyleGroup FROM styles WHERE brewStyleGroup >= 29";
+	$query_styles = "SELECT style_name,style_cat FROM styles_custom";
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
 	
 	do {  
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategorySort='%s'",$row_styles['brewStyleGroup']);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM brewing WHERE brewCategorySort='%s'",$row_styles['style_cat']);
 		$result = mysql_query($query_entry_count, $brewing) or die(mysql_error());
 		$row = mysql_fetch_array($result);
-		//if ($row_styles['brewStyleGroup'] == $filter) $selected = ' "selected"'; else $selected = '';
-		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['brewStyleGroup'].$suffix.'" title="Print '.$row_styles['brewStyle'].'">'.$row_styles['brewStyleGroup'].' '.$row_styles['brewStyle'].' ('.$row['count'].' entries)</a>'; } 
+		//if ($row_styles['style_cat'] == $filter) $selected = ' "selected"'; else $selected = '';
+		if ($row['count'] > 0) { $style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$row_styles['style_cat'].$suffix.'" title="Print '.$row_styles['style_name'].'">'.$row_styles['style_cat'].' '.$row_styles['style_name'].' ('.$row['count'].' entries)</a>'; } 
 		mysql_free_result($result);
 	} while ($row_styles = mysql_fetch_assoc($styles));
 	
@@ -1437,7 +1483,7 @@ function score_count($table_id,$method) {
 	
 function orphan_styles() { 
 	include(CONFIG.'config.php');
-	$query_styles = "SELECT id,brewStyle,brewStyleType FROM styles WHERE brewStyleGroup >= 29";
+	$query_styles = "SELECT id,style_name,style_type FROM style_custom";
 	$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 	$row_styles = mysql_fetch_assoc($styles);
 	$totalRows_styles = mysql_num_rows($styles);
@@ -1452,8 +1498,8 @@ function orphan_styles() {
 	$return = "";
 	if ($totalRows_styles > 0) {
 		do {
-			if (!in_array($row_styles['brewStyleType'], $a)) { 
-				if ($row_styles['brewStyleType'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='images/pencil.png' alt='Edit ".$row_styles['brewStyle']."' title='Edit ".$row_styles['brewStyle']."'></span></a>".$row_styles['brewStyle']."</p>";
+			if (!in_array($row_styles['style_type'], $a)) { 
+				if ($row_styles['style_type'] > 3) $return .= "<p><a href='index.php?section=admin&amp;go=styles&amp;action=edit&amp;id=".$row_styles['id']."'><span class='icon'><img src='images/pencil.png' alt='Edit ".$row_styles['style_name']."' title='Edit ".$row_styles['style_name']."'></span></a>".$row_styles['style_name']."</p>";
 			}
 		} while ($row_styles = mysql_fetch_assoc($styles));
 	}
@@ -1570,10 +1616,20 @@ function get_contacts() {
 function brewer_info($bid) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail FROM brewer WHERE uid='%s'", $bid);
+	$query_brewer_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerPhone1,brewerJudgeRank,brewerJudgeID,brewerJudgeBOS,brewerEmail,brewerClubs FROM brewer WHERE uid='%s'", $bid);
 	$brewer_info = mysql_query($query_brewer_info, $brewing) or die(mysql_error());
 	$row_brewer_info = mysql_fetch_assoc($brewer_info);
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail'];
+	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerPhone1']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerJudgeBOS']."^".$row_brewer_info['brewerEmail']."^".$row_brewer_info['brewerClubs'];
+	return $r;
+}
+
+function entry_info($eid) {
+	include(CONFIG.'config.php');
+	mysql_select_db($database, $brewing);
+	$query_entry_info = sprintf("SELECT brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle,brewCoBrewer FROM brewing WHERE id='%s'", $eid);
+	$entry_info = mysql_query($query_entry_info, $brewing) or die(mysql_error());
+	$row_entry_info = mysql_fetch_assoc($entry_info);
+	$r = $row_entry_info['brewName']."^".$row_entry_info['brewCategorySort']."^".$row_entry_info['brewSubCategory']."^".$row_entry_info['brewStyle']."^".$row_entry_info['brewCoBrewer']."^".$row_entry_info['brewCategory'];
 	return $r;
 }
 
@@ -1581,7 +1637,7 @@ function get_entry_count() {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	
-	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='Y' AND brewReceived='Y'";
+	$query_paid = "SELECT COUNT(*) as 'count' FROM brewing WHERE brewPaid='1' AND brewReceived='1'";
 	$paid = mysql_query($query_paid, $brewing) or die(mysql_error());
 	$row_paid = mysql_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -1593,8 +1649,8 @@ function get_participant_count($type) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
 	if ($type == 'default') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer";
-	if ($type == 'judge') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerJudge='Y'";
-	if ($type == 'steward') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerSteward='Y'";
+	if ($type == 'judge') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerJudge='1'";
+	if ($type == 'steward') $query_participant_count = "SELECT COUNT(*) as 'count' FROM brewer WHERE brewerSteward='1'";
 	$participant_count = mysql_query($query_participant_count, $brewing) or die(mysql_error());
 	$row_participant_count = mysql_fetch_assoc($participant_count);
 	
@@ -1652,7 +1708,7 @@ function get_suffix($dbTable) {
 function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 	include(CONFIG.'config.php');
 	mysql_select_db($database, $brewing);
-	$query_tables = "SELECT id,tableNumber,tableName FROM $tables_db_table";
+	$query_tables = "SELECT id,tableNumber,tableName FROM $tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysql_query($query_tables, $brewing) or die(mysql_error());
 	$row_tables = mysql_fetch_assoc($tables);
 	
@@ -1663,9 +1719,9 @@ function score_table_choose($dbTable,$tables_db_table,$scores_db_table) {
 		$scores = mysql_query($query_scores, $brewing) or die(mysql_error());
 		$row_scores = mysql_fetch_assoc($scores);
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
-		if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable,"default")) { 
+		//if (!get_table_info($row_tables['id'],"count_scores",$row_tables['id'],$dbTable,"default")) { 
         	$r .= "<option value=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table #".$row_tables['tableNumber'].": ".$row_tables['tableName']."</option>";
-		 	} 
+		 //	} 
 		    mysql_free_result($scores);
 		} while ($row_tables = mysql_fetch_assoc($tables));
      $r .= "</select>";

@@ -27,20 +27,20 @@ if ((greaterDate($today,$row_contest_info['contestRegistrationDeadline'])) && ($
   	<span class="adminSubNav">
     	<span class="icon"><img src="images/printer.png" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries');">Print <em>This</em> List</a></div>
   		<div id="printMenu_entries" class="menu" onmouseover="menuMouseover(event)">
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_number&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Number</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=category&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Category</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Brewer Last Name</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Name</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_number&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Number</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=category&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Category</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Brewer Last Name</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;psort=entry_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Name</a>
   		</div>
   </span>
   <?php if (($totalRows_entry_count > $limit) && ($filter == "default")) { ?>
   <span class="adminSubNav">
     	<span class="icon"><img src="images/printer.png" /></span><div class="menuBar"><a class="menuButton" href="#" onclick="#" onmouseover="buttonMouseover(event, 'printMenu_entries_all');">Print <em>All</em></a></div>
   		<div id="printMenu_entries_all" class="menu" onmouseover="menuMouseover(event)">
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_number&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Number</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=category&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Category</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Brewer Last Name</a>
-  			<a class="menuItem thickbox" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Name</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_number&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Number</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=category&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Category</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=brewer_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Brewer Last Name</a>
+  			<a id="modal_window_link" class="menuItem" href="output/print.php?<?php echo $_SERVER['QUERY_STRING']; ?>&amp;action=print&amp;view=all&amp;psort=entry_name&amp;TB_iframe=true&amp;height=450&amp;width=750&amp;KeepThis=true">By Entry Name</a>
   		</div>
   </span>
   <?php } ?>
@@ -199,7 +199,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 	{  
 	mysql_select_db($database, $brewing);
 	if ($row_log['brewCategory'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat = '%s' AND style_subcat = '%s'", $fix.$row_log['brewCategory'], $row_log['brewSubCategory']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -207,12 +207,12 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 	$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 	$row_brewer = mysql_fetch_array($brewer);
 	
-	$query_styles_num = "SELECT DISTINCT brewStyleGroup FROM styles ORDER BY brewStyleGroup ASC";
+	$query_styles_num = "SELECT DISTINCT style_cat FROM $styles_active ORDER BY style_cat ASC";
 	$styles_num = mysql_query($query_styles_num, $brewing) or die(mysql_error());
 	$row_styles_num = mysql_fetch_assoc($styles_num);
 	$totalRows_styles_num = mysql_num_rows($styles_num);
 	
-	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
+	$styleConvert = style_convert($row_log['brewCategorySort'], 1, $row_log['brewCategory']);
 	
 	
 	?>
@@ -221,13 +221,13 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['id']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewJudgingNumber']; ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php echo $row_log['brewName']; ?></td>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;filter=<?php echo $row_log['brewCategorySort']; ?>" title="See only the <?php echo $styleConvert; ?> entries"><?php } echo style_convert($row_log['brewStyle'],"0",$row_log['brewCategory']); if (($filter == "default") && ($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($bid == "default") && ($dbTable == "default")) { ?><a href="index.php?section=admin&amp;go=entries&amp;bid=<?php echo $row_log['brewBrewerID']; ?>" title="See only the <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s"; ?> entries"><?php } echo  $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?><?php if (($bid == "default") && ($dbTable == "default")) { ?></a><?php } ?></td>
-  <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewPaid'] == "Y") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "Y") echo "X"; } ?></td>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "Y") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "Y") echo "X"; } ?></td>
+  <td nowrap="nowrap" class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewPaid" name="brewPaid<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewPaid'] == "1") echo "checked"; else ""; ?> /><?php if ($row_brewer['brewerDiscount'] == "Y") echo "&nbsp;<span class='icon'><img src='images/star.png' title='Redeemed Discount Code'></span>"; } else { if ($row_log['brewPaid'] == "1") echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewReceived" name="brewReceived<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewReceived'] == "1") echo "checked"; else ""; ?> /><?php } else { if ($row_log['brewReceived'] == "2") echo "X"; } ?></td>
   
 <?php if ($row_prefs['prefsCompOrg'] == "N") { ?>
-  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="Y" <?php if ($row_log['brewWinner'] == "Y") echo "checked"; ?> /><?php } else { if (($row_log['brewWinner'] == "Y") && ($dbTable != "default")) echo "X"; } ?></td>
+  <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>"><?php if (($action != "print") && ($dbTable == "default")) { ?><input id="brewWinner" name="brewWinner<?php echo $row_log['id']; ?>" type="checkbox" value="1" <?php if ($row_log['brewWinner'] == "1") echo "checked"; ?> /><?php } else { if (($row_log['brewWinner'] == "1") && ($dbTable != "default")) echo "X"; } ?></td>
   <td class="dataList <?php if ($action == "print") echo " bdr1B"; ?>">
   <?php if (($action != "print") && ($dbTable == "default")) { ?>   
   <input type="text" name="brewWinnerCat<?php echo $row_log['id']; ?>" id="brewWinnerCat" size="3" value="<?php echo $row_log['brewWinnerCat']; ?>" />
@@ -252,7 +252,7 @@ $total_fees_unpaid = ($total_fees - $total_fees_paid);
 <?php } // end if ($row_prefs['prefsCompOrg'] == "N") ?>
   <?php if (($action != "print") && ($dbTable == "default")) { ?>
   <td class="dataList" nowrap="nowrap">
-  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a class="thickbox" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
+  <span class="icon"><a href="index.php?section=brew&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_log['brewBrewerID']; ?>&amp;action=edit&amp;id=<?php echo $row_log['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit <?php echo $row_log['brewName']; ?>" title="Edit <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a href="javascript:DelWithCon('includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $filter; ?>&amp;dbTable=brewing&amp;action=delete','id',<?php echo $row_log['id']; ?>,'Are you sure you want to delete the entry called <?php echo $row_log['brewName']; ?>? This cannot be undone.');"><img src="images/bin_closed.png"  border="0" alt="Delete <?php echo $row_log['brewName']; ?>" title="Delete <?php echo $row_log['brewName']; ?>"></a></span><span class="icon"><a id="modal_window_link" href="output/entry.php?id=<?php echo $row_log['id']; ?>&amp;bid=<?php echo $row_log['brewBrewerID']; ?>&KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"><img src="images/printer.png"  border="0" alt="Print the Entry Forms for <?php echo $row_log['brewName']; ?>" title="Print the Entry Forms for <?php echo $row_log['brewName']; ?>"></a></span>
   </td>
   <?php } ?>
   </tr>

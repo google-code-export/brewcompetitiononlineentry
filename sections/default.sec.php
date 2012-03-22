@@ -15,7 +15,7 @@ if (($row_contest_info['contestLogo'] != "") && (file_exists('user_images/'.$row
 }
 ?>
 <?php if ($action != "print") { ?>
-<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a class="data thickbox" href="output/print.php?section=<?php echo $section; ?>&amp;action=print&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Print General Information">Print This Page</a></p>
+<p><span class="icon"><img src="images/printer.png"  border="0" alt="Print" /></span><a id="modal_window_link" class="data" href="output/print.php?section=<?php echo $section; ?>&amp;action=print" title="Print General Information">Print This Page</a></p>
 <?php } ?>
 <?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <?php if ((isset($_SESSION['loginUsername'])) && ($row_user['userLevel'] == "1") && ($section == "admin")) { 
@@ -27,10 +27,7 @@ if (judging_date_return() > 0) { ?>
 <?php }
 if (judging_date_return() == 0) { 
 	include ('judge_closed.sec.php'); 
-	if ($row_prefs['prefsDisplayWinners'] == "Y") {  ?>
-		<script type="text/javascript" language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-		<script type="text/javascript" language="javascript" src="js_includes/jquery.dataTables.js"></script>
-	<?php
+	if ($row_prefs['prefsDisplayWinners'] == "Y") {  
 		include (INCLUDES.'db_tables.inc.php');
 		include (DB.'winners.db.php'); 
 		include (SECTIONS.'bos.sec.php');
@@ -57,8 +54,8 @@ if ($row_contest_info['contestCircuit'] != "") { ?>
 <h2>Circuit Qualification</h2>
 <?php 
 echo $row_contest_info['contestCircuit'];
-} 
-
+} ?>
+<?php 
 if ($row_prefs['prefsSponsors'] == "Y") {
 	if ($totalRows_sponsors > 0) {
 ?>
@@ -106,4 +103,5 @@ else { ?>
 		} // end if no logos 
 	} // end if (totalRows_sponsors > 0)
 } // end if prefs dictate display sponsors 
+
 ?>

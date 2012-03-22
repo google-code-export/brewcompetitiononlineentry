@@ -48,13 +48,14 @@ $totalRows_entry_count = total_paid_received($go,"default");
 </div>
 <?php if ($dbTable == "default") { ?>
 <div class="adminSubNavContainer">
+<?php if (($totalRows_scores < $totalRows_entry_count) && ($totalRows_tables > 0)) { ?>
 <p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-	<?php if ($totalRows_scores < $totalRows_entry_count) { ?>
+
 	<span class="adminSubNav">
 		<?php if ($id != "default") echo "<em>All</em> scores have not been entered for table(s):"; else echo "Add/Edit Scores for:"; ?>
 	</span>
     <span class="adminSubNav"><?php echo score_table_choose($dbTable,$tables_db_table,$scores_db_table); ?></span>
-	<?php } ?>
+<?php } else echo "<p>No tables have been defined yet. Tables must be defined before scores can be entered.</p>"; ?>
 </div>
  <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
@@ -120,7 +121,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	$row_entries_1 = mysql_fetch_assoc($entries_1);
 	$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 	
-	$query_styles_1 = sprintf("SELECT brewStyle FROM styles WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
+	$query_styles_1 = sprintf("SELECT style_name FROM $styles_active WHERE style_cat='%s' AND style_subcat='%s'", $row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory']);
 	$styles_1 = mysql_query($query_styles_1, $brewing) or die(mysql_error());
 	$row_styles_1 = mysql_fetch_assoc($styles_1);
 	
@@ -147,7 +148,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td class="data"><?php echo $row_scores['scoreEntry']; ?></td>
         <td class="data"><?php if ($row_scores['scorePlace'] == "5") echo "HM"; else echo $row_scores['scorePlace']; ?></td>  
         <?php if ($dbTable == "default") { ?>
-        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a class="thickbox" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>&amp;KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800"><img src="images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
+        <td class="data" width="5%" nowrap="nowrap"><span class="icon"><a href="index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="images/pencil.png"  border="0" alt="Edit the <?php echo $row_tables_1['tableName']; ?> scores" title="Edit the <?php echo $row_tables_1['tableName']; ?> scores"></a></span><span class="icon"><a id="modal_window_link" href="reports.php?section=admin&amp;go=judging_scores&amp;id=<?php echo $row_tables_1['id']; ?>"><img src="images/printer.png"  border="0" alt="Print the scores for <?php echo $row_tables_1['tableName']; ?>" title="Print the scores for <?php echo $row_tables_1['tableName']; ?>"></a></span>
         </td>
         <?php } ?>
     </tr>
@@ -198,11 +199,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	
 	foreach (array_unique($a) as $value) {
 		
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM styles WHERE id='%s'", $value);
+		$query_styles = sprintf("SELECT style_cat,style_subcat,style_name,style_type FROM $styles_active WHERE id='%s'", $value);
 		$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 		$row_styles = mysql_fetch_assoc($styles);
 		
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='Y' AND brewReceived='Y'", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM $brewing_db_table WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewPaid='1' AND brewReceived='1'", $row_styles['style_cat'], $row_styles['style_subcat']);
 		$entries = mysql_query($query_entries, $brewing) or die(mysql_error());
 		$row_entries = mysql_fetch_assoc($entries);
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
@@ -224,10 +225,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['eid'] != "")) echo $row_scores['eid']; else echo $row_entries['id']; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php if (($action == "edit") && ($row_scores['bid'] != "")) echo $row_scores['bid']; else echo $row_entries['uid']; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
-        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['brewStyleType'],"1","bcoe"); ?>" />
+        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($row_styles['style_type'],"1","bcoe"); ?>" />
         <td><?php echo $row_entries['id']; ?></td>
         <td class="data"><?php echo $row_entries['brewJudgingNumber']; ?></td>
-        <td class="data"><?php echo $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_styles['brewStyle']; ?></td>
+        <td class="data"><?php echo style_convert($row_entries['brewStyle'],"0",$row_entries['brewCategory']); ?></td>
     	<td class="data"><input type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $row_scores['scoreEntry']; ?>" /></td>
         <td>
         <select name="scorePlace<?php echo $score_id; ?>">

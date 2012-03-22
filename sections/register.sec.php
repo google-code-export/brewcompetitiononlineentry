@@ -250,6 +250,8 @@ $row_countries = mysql_fetch_assoc($countries);
 	});
 </script>
 <input type="hidden" name="userLevel" value="2" />
+<input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
 <?php if ($go == "entrant") { ?>
 <input type="hidden" name="brewerJudge" value="N" />
 <input type="hidden" name="brewerSteward" value="N" />

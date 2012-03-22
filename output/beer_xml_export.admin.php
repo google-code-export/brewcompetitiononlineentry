@@ -18,7 +18,7 @@ $row_name = mysql_fetch_assoc($name);
 $totalRows_name = mysql_num_rows($name);
 
 /* mysql_select_db($database_brewing, $brewing);
-$query_style = sprintf("SELECT * FROM styles WHERE brewStyle = '%s'", $colname_style);
+$query_style = sprintf("SELECT * FROM $styles_active WHERE brewStyle = '%s'", $colname_style);
 $style = mysql_query($query_style, $brewing) or die(mysql_error());
 $row_style = mysql_fetch_assoc($style);
 $totalRows_style = mysql_num_rows($style);
@@ -63,87 +63,87 @@ $xml_output .= "<RECIPES>\n";
 			$xml_output .= "\t\t\t<NAME>" . $replaced . "</NAME>\n";
 			$xml_output .= "\t\t\t<VERSION>1</VERSION>\n";
 			// Convert Style category number to Beer XML specifications
-			if ($row_style['brewStyleGroup'] == "01") { $xml_output .= "\t\t\t<CATEGORY>" . "Light Lager" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "02") { $xml_output .= "\t\t\t<CATEGORY>" . "Pilsner" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "03") { $xml_output .= "\t\t\t<CATEGORY>" . "European Amber Lager" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "04") { $xml_output .= "\t\t\t<CATEGORY>" . "Dark Lager" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "05") { $xml_output .= "\t\t\t<CATEGORY>" . "Bock" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "06") { $xml_output .= "\t\t\t<CATEGORY>" . "Light Hybrid Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "07") { $xml_output .= "\t\t\t<CATEGORY>" . "Amber Hybrid Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "08") { $xml_output .= "\t\t\t<CATEGORY>" . "English Pale Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "09") { $xml_output .= "\t\t\t<CATEGORY>" . "Scottish and Irish Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "10") { $xml_output .= "\t\t\t<CATEGORY>" . "American Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "11") { $xml_output .= "\t\t\t<CATEGORY>" . "English Brown Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "12") { $xml_output .= "\t\t\t<CATEGORY>" . "Porter" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "13") { $xml_output .= "\t\t\t<CATEGORY>" . "Stout" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "14") { $xml_output .= "\t\t\t<CATEGORY>" . "India Pale Ale (IPA)" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "15") { $xml_output .= "\t\t\t<CATEGORY>" . "German Wheat and Rye Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "16") { $xml_output .= "\t\t\t<CATEGORY>" . "Belgian and French Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "17") { $xml_output .= "\t\t\t<CATEGORY>" . "Sour Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "18") { $xml_output .= "\t\t\t<CATEGORY>" . "Belgian Strong Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "19") { $xml_output .= "\t\t\t<CATEGORY>" . "Strong Ale" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "20") { $xml_output .= "\t\t\t<CATEGORY>" . "Gruit Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "21") { $xml_output .= "\t\t\t<CATEGORY>" . "Spice/Herb/Vegetable Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "22") { $xml_output .= "\t\t\t<CATEGORY>" . "Smoke-Flavored and Wood-Aged Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "23") { $xml_output .= "\t\t\t<CATEGORY>" . "Specialty Beer" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "24") { $xml_output .= "\t\t\t<CATEGORY>" . "Traditional Mead" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "25") { $xml_output .= "\t\t\t<CATEGORY>" . "Melomel (Fruit Mead)" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "26") { $xml_output .= "\t\t\t<CATEGORY>" . "Other Mead" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "27") { $xml_output .= "\t\t\t<CATEGORY>" . "Standard Cider and Perry" . "</CATEGORY>\n"; }
-			if ($row_style['brewStyleGroup'] == "28") { $xml_output .= "\t\t\t<CATEGORY>" . "Specialty Cider and Perry" . "</CATEGORY>\n"; }
-			$xml_output .= "\t\t\t<CATEGORY_NUMBER>" . $row_style['brewStyleGroup'] . "</CATEGORY_NUMBER>\n"; 
-			$xml_output .= "\t\t\t<STYLE_LETTER>" . $row_style['brewStyleNum'] . "</STYLE_LETTER>\n";
+			if ($row_style['style_cat'] == "01") { $xml_output .= "\t\t\t<CATEGORY>" . "Light Lager" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "02") { $xml_output .= "\t\t\t<CATEGORY>" . "Pilsner" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "03") { $xml_output .= "\t\t\t<CATEGORY>" . "European Amber Lager" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "04") { $xml_output .= "\t\t\t<CATEGORY>" . "Dark Lager" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "05") { $xml_output .= "\t\t\t<CATEGORY>" . "Bock" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "06") { $xml_output .= "\t\t\t<CATEGORY>" . "Light Hybrid Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "07") { $xml_output .= "\t\t\t<CATEGORY>" . "Amber Hybrid Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "08") { $xml_output .= "\t\t\t<CATEGORY>" . "English Pale Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "09") { $xml_output .= "\t\t\t<CATEGORY>" . "Scottish and Irish Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "10") { $xml_output .= "\t\t\t<CATEGORY>" . "American Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "11") { $xml_output .= "\t\t\t<CATEGORY>" . "English Brown Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "12") { $xml_output .= "\t\t\t<CATEGORY>" . "Porter" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "13") { $xml_output .= "\t\t\t<CATEGORY>" . "Stout" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "14") { $xml_output .= "\t\t\t<CATEGORY>" . "India Pale Ale (IPA)" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "15") { $xml_output .= "\t\t\t<CATEGORY>" . "German Wheat and Rye Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "16") { $xml_output .= "\t\t\t<CATEGORY>" . "Belgian and French Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "17") { $xml_output .= "\t\t\t<CATEGORY>" . "Sour Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "18") { $xml_output .= "\t\t\t<CATEGORY>" . "Belgian Strong Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "19") { $xml_output .= "\t\t\t<CATEGORY>" . "Strong Ale" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "20") { $xml_output .= "\t\t\t<CATEGORY>" . "Gruit Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "21") { $xml_output .= "\t\t\t<CATEGORY>" . "Spice/Herb/Vegetable Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "22") { $xml_output .= "\t\t\t<CATEGORY>" . "Smoke-Flavored and Wood-Aged Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "23") { $xml_output .= "\t\t\t<CATEGORY>" . "Specialty Beer" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "24") { $xml_output .= "\t\t\t<CATEGORY>" . "Traditional Mead" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "25") { $xml_output .= "\t\t\t<CATEGORY>" . "Melomel (Fruit Mead)" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "26") { $xml_output .= "\t\t\t<CATEGORY>" . "Other Mead" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "27") { $xml_output .= "\t\t\t<CATEGORY>" . "Standard Cider and Perry" . "</CATEGORY>\n"; }
+			if ($row_style['style_cat'] == "28") { $xml_output .= "\t\t\t<CATEGORY>" . "Specialty Cider and Perry" . "</CATEGORY>\n"; }
+			$xml_output .= "\t\t\t<CATEGORY_NUMBER>" . $row_style['style_cat'] . "</CATEGORY_NUMBER>\n"; 
+			$xml_output .= "\t\t\t<STYLE_LETTER>" . $row_style['style_subcat'] . "</STYLE_LETTER>\n";
 			$xml_output .= "\t\t\t<STYLE_GUIDE>" . "BJCP" . "</STYLE_GUIDE>\n";
 			// Convert Style category number to Beer XML specifications
-			if ($row_style['brewStyleGroup'] == "01") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "02") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "03") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "04") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "05") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "06") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "07") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "08") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "09") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "10") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "11") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "12") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "13") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "14") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "15") { $xml_output .= "\t\t\t<TYPE>" . "Wheat" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "16") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "17") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "18") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "19") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "20") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "21") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "22") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "23") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "24") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "25") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "26") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "27") { $xml_output .= "\t\t\t<TYPE>" . "Cider" . "</TYPE>\n"; }
-			if ($row_style['brewStyleGroup'] == "28") { $xml_output .= "\t\t\t<TYPE>" . "Cider" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "01") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "02") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "03") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "04") { $xml_output .= "\t\t\t<TYPE>" . "Lager" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "05") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "06") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "07") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "08") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "09") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "10") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "11") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "12") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "13") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "14") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "15") { $xml_output .= "\t\t\t<TYPE>" . "Wheat" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "16") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "17") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "18") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "19") { $xml_output .= "\t\t\t<TYPE>" . "Ale" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "20") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "21") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "22") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "23") { $xml_output .= "\t\t\t<TYPE>" . "Mixed" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "24") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "25") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "26") { $xml_output .= "\t\t\t<TYPE>" . "Mead" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "27") { $xml_output .= "\t\t\t<TYPE>" . "Cider" . "</TYPE>\n"; }
+			if ($row_style['style_cat'] == "28") { $xml_output .= "\t\t\t<TYPE>" . "Cider" . "</TYPE>\n"; }
 			// Style Specifics
-			if ($row_style['brewStyleOG'] == "") { $xml_output .= "\t\t\t<OG_MIN>" . "Varies" . "</OG_MIN>\n"; }
-			if ($row_style['brewStyleOG'] != "") { $xml_output .= "\t\t\t<OG_MIN>" . $row_style['brewStyleOG'] . "</OG_MIN>\n"; }
-			if ($row_style['brewStyleOG'] == "") { $xml_output .= "\t\t\t<OG_MAX>" . "Varies" . "</OG_MAX>\n"; }
-			if ($row_style['brewStyleOG'] != "") { $xml_output .= "\t\t\t<OG_MAX>" . $row_style['brewStyleOGMax'] . "</OG_MAX>\n"; }
-			if ($row_style['brewStyleFG'] == "") { $xml_output .= "\t\t\t<FG_MIN>" . "Varies" . "</FG_MIN>\n"; }
-			if ($row_style['brewStyleFG'] != "") { $xml_output .= "\t\t\t<FG_MIN>" . $row_style['brewStyleFGMax'] . "</FG_MIN>\n"; }
-			if ($row_style['brewStyleFG'] == "") {$xml_output .= "\t\t\t<FG_MAX>" . "Varies" . "</FG_MAX>\n"; }
-			if ($row_style['brewStyleFG'] != "") {$xml_output .= "\t\t\t<FG_MAX>" . $row_style['brewStyleFG'] . "</FG_MAX>\n"; }
-			if ($row_style['brewStyleIBU'] == "") { $xml_output .= "\t\t\t<IBU_MIN>" . "Varies" . "</IBU_MIN>\n"; }
-			if ($row_style['brewStyleIBU'] != "") { $xml_output .= "\t\t\t<IBU_MIN>" . $row_style['brewStyleIBU'] . "</IBU_MIN>\n"; }
-			if ($row_style['brewStyleIBU'] == "") { $xml_output .= "\t\t\t<IBU_MAX>" . "Varies" . "</IBU_MAX>\n"; }
-			if ($row_style['brewStyleIBU'] != "") { $xml_output .= "\t\t\t<IBU_MAX>" . $row_style['brewStyleIBUMax'] . "</IBU_MAX>\n"; }
-			if ($row_style['brewStyleSRM'] == "") { $xml_output .= "\t\t\t<COLOR_MIN>" . "Varies" . "</COLOR_MIN>\n"; }
-			if ($row_style['brewStyleSRM'] != "") { $xml_output .= "\t\t\t<COLOR_MIN>" . $row_style['brewStyleSRM'] . "</COLOR_MIN>\n"; }
-			if ($row_style['brewStyleSRM'] == "") { $xml_output .= "\t\t\t<COLOR_MAX>" . "Varies" . "</COLOR_MAX>\n"; }
-			if ($row_style['brewStyleSRM'] != "") { $xml_output .= "\t\t\t<COLOR_MAX>" . $row_style['brewStyleSRMMax'] . "</COLOR_MAX>\n"; }
-			if ($row_style['brewStyleABV'] == "") { $xml_output .= "\t\t\t<ABV_MIN>" . "Varies" . "</ABV_MIN>\n"; }
-			if ($row_style['brewStyleABV'] != "") { $xml_output .= "\t\t\t<ABV_MIN>" . $row_style['brewStyleABV'] . "</ABV_MIN>\n"; }
-			if ($row_style['brewStyleABV'] == "") { $xml_output .= "\t\t\t<ABV_MAX>" . "Varies" . "</ABV_MAX>\n"; }
-			if ($row_style['brewStyleABV'] != "") { $xml_output .= "\t\t\t<ABV_MAX>" . $row_style['brewStyleABVMax'] . "</ABV_MAX>\n"; }
+			if ($row_style['style_og_min'] == "") { $xml_output .= "\t\t\t<OG_MIN>" . "Varies" . "</OG_MIN>\n"; }
+			if ($row_style['style_og_min'] != "") { $xml_output .= "\t\t\t<OG_MIN>" . $row_style['style_og_min'] . "</OG_MIN>\n"; }
+			if ($row_style['style_og_min'] == "") { $xml_output .= "\t\t\t<OG_MAX>" . "Varies" . "</OG_MAX>\n"; }
+			if ($row_style['style_og_min'] != "") { $xml_output .= "\t\t\t<OG_MAX>" . $row_style['style_og_max'] . "</OG_MAX>\n"; }
+			if ($row_style['style_fg_min'] == "") { $xml_output .= "\t\t\t<FG_MIN>" . "Varies" . "</FG_MIN>\n"; }
+			if ($row_style['style_fg_min'] != "") { $xml_output .= "\t\t\t<FG_MIN>" . $row_style['style_fg_max'] . "</FG_MIN>\n"; }
+			if ($row_style['style_fg_min'] == "") {$xml_output .= "\t\t\t<FG_MAX>" . "Varies" . "</FG_MAX>\n"; }
+			if ($row_style['style_fg_min'] != "") {$xml_output .= "\t\t\t<FG_MAX>" . $row_style['style_fg_min'] . "</FG_MAX>\n"; }
+			if ($row_style['style_ibu_min'] == "") { $xml_output .= "\t\t\t<IBU_MIN>" . "Varies" . "</IBU_MIN>\n"; }
+			if ($row_style['style_ibu_min'] != "") { $xml_output .= "\t\t\t<IBU_MIN>" . $row_style['style_ibu_min'] . "</IBU_MIN>\n"; }
+			if ($row_style['style_ibu_min'] == "") { $xml_output .= "\t\t\t<IBU_MAX>" . "Varies" . "</IBU_MAX>\n"; }
+			if ($row_style['style_ibu_min'] != "") { $xml_output .= "\t\t\t<IBU_MAX>" . $row_style['style_ibu_max'] . "</IBU_MAX>\n"; }
+			if ($row_style['style_srm_min'] == "") { $xml_output .= "\t\t\t<COLOR_MIN>" . "Varies" . "</COLOR_MIN>\n"; }
+			if ($row_style['style_srm_min'] != "") { $xml_output .= "\t\t\t<COLOR_MIN>" . $row_style['style_srm_min'] . "</COLOR_MIN>\n"; }
+			if ($row_style['style_srm_min'] == "") { $xml_output .= "\t\t\t<COLOR_MAX>" . "Varies" . "</COLOR_MAX>\n"; }
+			if ($row_style['style_srm_min'] != "") { $xml_output .= "\t\t\t<COLOR_MAX>" . $row_style['style_srm_max'] . "</COLOR_MAX>\n"; }
+			if ($row_style['style_abv_min'] == "") { $xml_output .= "\t\t\t<ABV_MIN>" . "Varies" . "</ABV_MIN>\n"; }
+			if ($row_style['style_abv_min'] != "") { $xml_output .= "\t\t\t<ABV_MIN>" . $row_style['style_abv_min'] . "</ABV_MIN>\n"; }
+			if ($row_style['style_abv_min'] == "") { $xml_output .= "\t\t\t<ABV_MAX>" . "Varies" . "</ABV_MAX>\n"; }
+			if ($row_style['style_abv_min'] != "") { $xml_output .= "\t\t\t<ABV_MAX>" . $row_style['style_abv_max'] . "</ABV_MAX>\n"; }
 		$xml_output .= "\t\t</STYLE>\n";
 		
 		

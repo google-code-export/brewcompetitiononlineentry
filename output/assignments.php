@@ -9,7 +9,7 @@ include(DB.'admin_common.db.php');
 include(INCLUDES.'version.inc.php');
 include(INCLUDES.'headers.inc.php');
 
-if ($filter == "stewards") $filter = "S"; else $filter = "J";
+//if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
 $query_assignments = sprintf("SELECT * FROM judging_assignments WHERE assignment='%s'", $filter);
 if ($id != "default") $query_assignments .= " AND assignTable='$id'";
@@ -41,7 +41,7 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 			"bStateSave" : false,
 			"bLengthChange" : false,
 			<?php if ($view == "name") { ?>
-			"aaSorting": [[0,'asc'],[2,'asc'],[4,'asc'],[5,'asc']],
+			"aaSorting": [[0,'asc'],[2,'asc'],[3,'asc'],[5,'asc']],
 			<?php } ?>
 			
 			<?php if ($view == "table") { ?>
@@ -112,7 +112,11 @@ $count = round((get_entry_count()/($row_judging_prefs['jPrefsFlightEntries'])),0
 <?php } // end if ($view != "sign-in") 
 else { 
 
-$query_brewer = sprintf("SELECT * FROM brewer WHERE brewerAssignment='%s'", $filter);
+$query_brewer = "SELECT * FROM brewer"; 
+if ($filter == "stewards") $query_brewer . = " WHERE brewerAssignmentSteward='1'";
+if ($filter == "judges") $query_brewer . = " WHERE brewerAssignmentJudge='1'";
+if ($filter == "staff") $query_brewer . = " WHERE brewerAssignmentStaff='1'";
+if ($filter == "organizer") $query_brewer . = " WHERE brewerAssignmentOrganizer='1'";
 $brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
 $row_brewer = mysql_fetch_assoc($brewer);
 $totalRows_brewer = mysql_num_rows($brewer);

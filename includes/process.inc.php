@@ -8,8 +8,8 @@ require('../paths.php');
 require(DB.'common.db.php');
 require(INCLUDES.'url_variables.inc.php');
 
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set('display_errors', '1');
+//error_reporting(E_ALL ^ E_NOTICE);
+//ini_set('display_errors', '1');
 
 // --------------------------- Various Functions -------------------------------- //
 
@@ -21,8 +21,9 @@ function generate_judging_num($style_cat_num) {
 	$brewing_styles = mysql_query($query_brewing_styles, $brewing) or die(mysql_error());
 	$row_brewing_styles = mysql_fetch_assoc($brewing_styles);
 	$totalRows_brewing_styles = mysql_num_rows($brewing_styles);
-	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $return = $style_cat_num."001";
-	else $return = $row_brewing_styles['brewJudgingNumber'] + 1;
+	if (($totalRows_brewing_styles == 0) || ($row_brewing_styles['brewJudgingNumber'] == "")) $r = $style_cat_num."001";
+	else $r = $row_brewing_styles['brewJudgingNumber'] + 1;
+	$return = sprintf("%05s",$r);
 	return $return;
 }
 
@@ -131,7 +132,7 @@ if ($dbTable == "drop_off") 			include_once (PROCESS.'process_drop_off.inc.php')
 
 // --------------------------- Styles --------------------------- //
 
-if ($dbTable == "styles") 				include_once (PROCESS.'process_styles.inc.php');
+if ($dbTable == "styles_custom")  		include_once (PROCESS.'process_styles.inc.php');
 
 // --------------------------- If Adding a Contact (Non-setup) --------------------------- //
 

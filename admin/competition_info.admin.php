@@ -68,7 +68,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Competition Logo File Name:</td>
     <td class="data"><input name="contestLogo" type="text" class="submit" size="50" maxlength="255" value="<?php echo $row_contest_info['contestLogo']; ?>" />
-    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php?KeepThis=true&amp;TB_iframe=true&amp;height=450&amp;width=800" title="Upload Competition Logo Image" class="thickbox">Upload Logo Image</a></td>
+    <br /><br /><span class="icon"><img src="images/picture_add.png" ></span><a href="admin/upload.admin.php" title="Upload Competition Logo Image" id="modal_window_link">Upload Logo Image</a></td>
     <td class="data"><em>Provide the exact name of the file (e.g., logo.jpg).</em></td>
   </tr>
 </table>
@@ -101,7 +101,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Competition Rules:</td>
     <td class="data">
-    	<textarea name="contestRules" cols="70" rows="15">
+    	<textarea name="contestRules" cols="80" rows="15">
 		<?php if ($section != "step4") echo $row_contest_info['contestRules']; else { ?>
         <p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>
 		<p>All mailed entries must <strong>received </strong>at the mailing location by the entry deadline - please allow for shipping time.</p>
@@ -116,6 +116,7 @@ $row_name = mysql_fetch_assoc($name);
 		<p>Bottles will not be returned to entrants.</p>
         <?php } ?>
         </textarea>
+    <p><a href="javascript:toggleEditor('contestRules');">Disable Rich-Text</a></p>
     </td>
     <td class="data"><em>Edit the provided general rules text as needed.</em></td>
   </tr>
@@ -166,7 +167,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel bdr1B_dashed">Bottle Acceptance Rules:</td>
     <td class="data bdr1B_dashed">
-    	<textarea name="contestBottles" cols="70" rows="15"><?php if ($section != "step4") echo $row_contest_info['contestBottles']; else { ?>
+    	<textarea name="contestBottles" cols="80" rows="15"><?php if ($section != "step4") echo $row_contest_info['contestBottles']; else { ?>
         <p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>
 		<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>
 		<p>Bottles will not be returned to contest entrants.</p>
@@ -175,6 +176,7 @@ $row_name = mysql_fetch_assoc($name);
 		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>
 		<?php } ?>
         </textarea>
+    <p><a href="javascript:toggleEditor('contestBottles');">Disable Rich-Text</a></p>
     </td>
     <td class="data bdr1B_dashed"><em>Indicate the number of bottles, size, color, etc. Edit default text as needed.</em></td>
   </tr>
@@ -216,7 +218,7 @@ $row_name = mysql_fetch_assoc($name);
   <tr>
     <td class="dataLabel">Awards Structure:</td>
     <td class="data">
-    <textarea name="contestAwards" class="submit" cols="70" rows="15">
+    <textarea name="contestAwards" class="submit" cols="80" rows="15">
 		<?php if ($section != "step4") echo $row_contest_info['contestAwards']; else { ?>
         <p>The awards ceremony will take place once judging is completed.</p>
 		<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>
@@ -224,26 +226,31 @@ $row_name = mysql_fetch_assoc($name);
 		<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>
         <?php } ?>
     </textarea>
+    <p><a href="javascript:toggleEditor('contestAwards');">Disable Rich-Text</a></p>
     </td>
     <td class="data"><em>Indicate places for each category, BOS procedure, qualifying criteria, etc. Edit default text as needed.</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Best of Show Award:</td>
-    <td class="data"><textarea name="contestBOSAward" class="submit" cols="70" rows="15"><?php echo $row_contest_info['contestBOSAward']; ?></textarea></td>
+    <td class="data"><textarea name="contestBOSAward" class="submit" cols="80" rows="15"><?php echo $row_contest_info['contestBOSAward']; ?></textarea>
+    <p><a href="javascript:toggleEditor('contestBOSAward');">Disable Rich-Text</a></p></td>
     <td class="data"><em>Indicate whether the Best of Show winner will receive a special award (e.g., a pro-am brew with a sponsoring brewery, etc.).</em></td>
   </tr>
   <tr>
     <td class="dataLabel">Circuit Qualifying Events:</td>
-    <td class="data"><textarea name="contestCircuit" class="submit" cols="70" rows="15"><?php echo $row_contest_info['contestCircuit']; ?></textarea></td>
+    <td class="data">
+    <textarea name="contestCircuit" class="submit" cols="80" rows="15"><?php echo $row_contest_info['contestCircuit']; ?></textarea>
+    <p><a href="javascript:toggleEditor('contestCircuit');">Disable Rich-Text</a></p>
+    </td>
     <td class="data"><em>Indicate whether your competition is a qualifier for any national or regional competitions.</em></td>
   </tr>
 </table>
-<?php if ($section != "step4") { ?>
+<?php if (($section != "step4") && ($row_prefs['prefsCompOrg'] != "Y")) { ?>
 <h3>Winners List</h3>
 <table class="dataTable">
   <tr>
     <td class="dataLabel">Complete Winners List:</td>
-    <td class="data"><textarea name="contestWinnersComplete" class="submit" cols="70" rows="15"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea><br /><a href="javascript:toggleEditor('contestWinnersComplete');"></a></td>
+    <td class="data"><textarea name="contestWinnersComplete" class="submit" cols="80" rows="15"><?php echo $row_contest_info['contestWinnersComplete']; ?></textarea></td>
     <td class="data"><em>Provide a complete winners list detailing the winners of each table, round, etc. This can be exported from HCCP in <strong>HTML format</strong> and pasted here.</em><p class="required">To paste raw HTML code, use this link: <a href="javascript:toggleEditor('contestWinnersComplete');">Add/Remove Editor</a>.</p>
       <p>If you paste using the editor to the left, most HTML tags will be stripped out and the original formatting will be lost.</p></td>
   </tr>

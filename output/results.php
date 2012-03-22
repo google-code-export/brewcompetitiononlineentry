@@ -86,7 +86,7 @@ $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"defaul
 			$row_entries = mysql_fetch_assoc($entries);
 			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
-			$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+			$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 			$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 			$row_styles = mysql_fetch_assoc($styles);
 	?>

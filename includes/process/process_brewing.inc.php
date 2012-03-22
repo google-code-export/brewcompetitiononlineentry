@@ -3,20 +3,26 @@
  * Module:      process_entry_add.inc.php
  * Description: This module does all the heavy lifting for adding entries to the DB
  */
+session_start();
+ 
+include(DB.'common.db.php');
+mysql_select_db($database, $brewing);
+
+$query_user = sprintf("SELECT userLevel FROM users WHERE user_name = '%s'", $_SESSION['loginUsername']);
+$user = mysql_query($query_user, $brewing) or die(mysql_error());
+$row_user = mysql_fetch_assoc($user);
 
 if ($action == "add") {
-	include(DB.'common.db.php');
-	mysql_select_db($database, $brewing);
-	$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
-	$user = mysql_query($query_user, $brewing) or die(mysql_error());
-	$row_user = mysql_fetch_assoc($user);
 	
 	if ($row_user['userLevel'] == 1) { 
-		$nameBreak = $_POST['brewBrewerID'];
-		$name = explode('*', $nameBreak);
-		$brewBrewerID = $name[0];
-		$brewBrewerLastName = $name[1];
-		$brewBrewerFirstName = $name[2];
+		$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $_POST['brewBrewerID']);
+		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+		$row_brewer = mysql_fetch_assoc($brewer);
+		
+		$brewBrewerID = $row_brewer['uid'];
+		$brewBrewerLastName = $row_brewer['brewerLastName'];
+		$brewBrewerFirstName = $row_brewer['brewerFirstName'];
+
 	}
 	else {
 		$brewBrewerID = $_POST['brewBrewerID'];
@@ -98,10 +104,10 @@ if ($action == "add") {
 	
 	// Get style name from broken parts
 	mysql_select_db($database, $brewing);
-	$query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
+	$query_style_name = "SELECT * FROM $styles_active WHERE style_cat='$styleFix' AND style_subcat='$style[1]'";
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
-	$check = $row_style_name['brewStyleOwn'];
+	$check = $row_style_name['style_owner'];
 	
 	if ($row_prefs['prefsDisplaySpecial'] == "Y") { 
 		switch($check) {
@@ -519,22 +525,23 @@ if ($action == "add") {
 } // end if ($action == "add")
 
 if ($action == "edit") {
-	$query_user = sprintf("SELECT * FROM users WHERE user_name = '%s'", $_SESSION["loginUsername"]);
-	$user = mysql_query($query_user, $brewing) or die(mysql_error());
-	$row_user = mysql_fetch_assoc($user);
-	$totalRows_user = mysql_num_rows($user);
 	
 	if ($row_user['userLevel'] == 1) { 
-	$nameBreak = $_POST['brewBrewerID'];
-	$name = explode('*', $nameBreak);
-	$brewBrewerID = $name[0];
-	$brewBrewerLastName = $name[1];
-	$brewBrewerFirstName = $name[2];
+		$name = $_POST['brewBrewerID'];
+		
+		$query_brewer = sprintf("SELECT * FROM brewer WHERE uid = '%s'", $name);
+		$brewer = mysql_query($query_brewer, $brewing) or die(mysql_error());
+		$row_brewer = mysql_fetch_assoc($brewer);
+		
+		$brewBrewerID = $row_brewer['uid'];
+		$brewBrewerLastName = $row_brewer['brewerLastName'];
+		$brewBrewerFirstName = $row_brewer['brewerFirstName'];
+	
 	}
 	else {
-	$brewBrewerID = $_POST['brewBrewerID'];
-	$brewBrewerLastName = $_POST['brewBrewerLastName']; 
-	$brewBrewerFirstName = $_POST['brewBrewerFirstName'];
+		$brewBrewerID = $_POST['brewBrewerID'];
+		$brewBrewerLastName = $_POST['brewBrewerLastName']; 
+		$brewBrewerFirstName = $_POST['brewBrewerFirstName'];
 	}
 	
 	$styleBreak = $_POST['brewStyle'];
@@ -611,10 +618,10 @@ if ($action == "edit") {
 	
 	// Get style name from broken parts
 	mysql_select_db($database, $brewing);
-	$query_style_name = "SELECT * FROM styles WHERE brewStyleGroup='$styleFix' AND brewStyleNum='$style[1]'";
+	$query_style_name = "SELECT * FROM $styles_active WHERE style_cat='$styleFix' AND style_subcat='$style[1]'";
 	$style_name = mysql_query($query_style_name, $brewing) or die(mysql_error());
 	$row_style_name = mysql_fetch_assoc($style_name);
-	$check = $row_style_name['brewStyleOwn'];
+	$check = $row_style_name['style_owner'];
 	
 	if ($row_prefs['prefsDisplaySpecial'] == "Y") { 
 		switch($check) {
@@ -829,12 +836,7 @@ if ($action == "edit") {
 	  }
 	  elseif ($section == "admin") $updateGoTo = $updateGoTo;
 	  else  $updateGoTo = "../index.php?section=list";
-	 /*
-	 echo $special."<br>";
-	 echo $check."<br>";
-	 echo $custom."<br>";
-	 echo $updateGoTo."<br>";
-	 */
+	 
 	 header(sprintf("Location: %s", $updateGoTo));
 
 } // end if ($action == "edit")

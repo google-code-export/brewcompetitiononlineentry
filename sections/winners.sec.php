@@ -14,13 +14,14 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 <?php
 	do { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+	$random = random_generator(6,2);
 	if  (score_count($row_tables['id'],"1")) {
 	?>
 	<h3>Table <?php echo $row_tables['tableNumber'].": ".$row_tables['tableName']." (".$entry_count." Entries)"; ?></h3>
     <?php if ($entry_count > 0) { ?>
      <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable<?php echo $row_tables['id']; ?>').dataTable( {
+		$('#sortable<?php echo $random; ?>').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -37,7 +38,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			} );
 		} );
 	</script>
-    <table class="dataTable" id="sortable<?php echo $row_tables['id']; ?>">
+    <table class="dataTable" id="sortable<?php echo $random; ?>">
     <thead>
 	<tr>
     	<th class="dataList bdr1B" width="1%" nowrap="nowrap">Place</th>
@@ -67,7 +68,7 @@ if ($row_prefs['prefsCompOrg'] == "Y") {
 			
 			$style = $row_entries['brewCategory'].$row_entries['brewSubCategory'];
 		
-			$query_styles = sprintf("SELECT brewStyle FROM styles WHERE id='%s'", $value);
+			$query_styles = sprintf("SELECT style_name FROM $styles_active WHERE id='%s'", $value);
 			$styles = mysql_query($query_styles, $brewing) or die(mysql_error());
 			$row_styles = mysql_fetch_assoc($styles);
 	?>
@@ -126,7 +127,7 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
  <?php do { 
 	mysql_select_db($database, $brewing);
 	//if ($row_log_winners['brewWinnerCat'] < 10) $fix = "0"; else $fix = "";
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log_winners['brewWinnerCat'], $row_log_winners['brewWinnerSubCat']);
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat = '%s' AND style_subcat = '%s'", $row_log_winners['brewWinnerCat'], $row_log_winners['brewWinnerSubCat']);
 	$style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	
@@ -145,7 +146,7 @@ if (($totalRows_log_winners > 0) && ($row_prefs['prefsCompOrg'] == "N")) {
   echo style_convert($row_log_winners['brewWinnerCat'], 1);  if ($row_log_winners['brewWinnerSubCat']!= "") { echo ": ".$row_style['brewStyle']." (".$row_log_winners['brewWinnerCat']; if ($row_log_winners['brewWinnerSubCat']!= "") echo $row_log_winners['brewSubCategory']; echo ")";  } 
   if ($row_log_winners['brewWinnerCat'] >= 29)
   {
-	$query_style = sprintf("SELECT * FROM styles WHERE brewStyleGroup='%s'", $row_log_winners['brewWinnerCat']);  
+	$query_style = sprintf("SELECT * FROM $styles_active WHERE style_cat='%s'", $row_log_winners['brewWinnerCat']);  
     $style = mysql_query($query_style, $brewing) or die(mysql_error());
 	$row_style = mysql_fetch_assoc($style);
 	echo ": ".$row_style['brewStyle'];

@@ -78,7 +78,7 @@ if ($totalRows_judging == 0) $output .= "<p>The competition judging date is yet 
 $output .= "<h3>Categories Accepted</h3>\n";
 $output .= "<ul>\n";
 do { 
-  $output .= "<li>".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$row_contest_info['contestName'].")</li>";
+  $output .= "<li>".ltrim($row_styles['style_cat'], "0").$row_styles['style_subcat']." ".$row_styles['style_name']; if ($row_styles['style_owner'] == "custom") $output .= " (Special style: ".$row_contest_info['contestName'].")</li>";
  } while ($row_styles = mysql_fetch_assoc($styles));
 $output .= "</ul>\n";
  
